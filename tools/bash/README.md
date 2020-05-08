@@ -16,8 +16,6 @@ for address in "${addresses[@]}"; do
    [[ ${address} =~ (\.) ]] && echo "${address} is ipv4"
    [[ ${address} =~ (:) ]]  && echo "${address} is ipv6"   
 done
-
-
 ```
 
 ### Split

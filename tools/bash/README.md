@@ -8,6 +8,20 @@
 
 ## Pattern Matching
 
+### Matching ipv6/ipv6 addresses in an array
+
+```
+addresses=( 'fd50:f:a:b::10:ffff', '192.168.10.10' )
+for address in "${addresses[@]}"; do
+   [[ ${address} =~ (\.) ]] && echo "${address} is ipv4"
+   [[ ${address} =~ (:) ]]  && echo "${address} is ipv6"   
+done
+
+
+```
+
+### Split
+
     fqdn=cl1.lab.redhat.com
     
     # Filter out Base Domain from fqdn

@@ -393,3 +393,621 @@ tun_id=$(ovs-vsctl get port $PORT other_config:segmentation_id | sed -e 's/"//g'
 ovs-appctl ofproto/trace br-tun in_port=${tun_ofport},dl_src=${dhcp_mac},dl_dst=${mac},tun_id=$tun_id
 
 ```
+
+
+
+## Create a bridge by OpenvSwitch and bind N tap device
+```
+#!/bin/bash
+
+BR=br0                          # Bridge name
+DPID=0000000000000001           # Bridge DPID
+IPADDR=10.168.1.1/16            # IP address of the internel port of the bridge (ie. Bridge IP Address)
+LINKNUM=3                       # Igress Link number of the bridge
+HOSTNUM=3                       # Egress Link (Host) number of the bridge
+CTRLIP=127.0.0.1                # Controller IP address
+CTRLPORT=6653                   # OpenFlow listening port
+OPENFLOW=OpenFlow10             # OpenFlow version
+
+
+if [ `id -u` != "0" ]; then
+    echo "*** This script must run as root ***"
+    exit
+fi
+
+# Create bridge
+ovs-vsctl --if-exist del-br $BR
+ovs-vsctl --may-exist add-br $BR \
+    -- set Bridge $BR fail-mode=secure \
+    -- set Bridge $BR other-config:datapath-id=$DPID \
+    -- set Bridge $BR protocols=$OPENFLOW \
+    -- set Bridge $BR stp_enable=true \
+    -- set-controller $BR tcp:$CTRLIP:$CTRLPORT \
+    -- set controller $BR connection-mode=out-of-band
+
+#ovs-vsctl set bridge $BR protocols=$OPENFLOW
+#ovs-vsctl set bridge $BR stp_enable=true
+#ovs-vsctl set-controller $BR tcp:$CTRLIP:$CTRLPORT
+#ip address add $IPADDR dev $BR
+
+# Create tap interfaces and bind each to the corresponding port
+for ((i=0; i<$LINKNUM; i++)); do
+    TAP=tap$i
+    ip tuntap del mode tap $TAP
+    ip tuntap add mode tap $TAP
+    ip link set $TAP up
+    ovs-vsctl add-port $BR $TAP -- set interface $TAP ofport_request=$(( i + HOSTNUM + 1 ))
+done
+
+# Up bridge
+ip link set $BR up
+
+echo "------------------------------ Bridge ------------------------------"
+ovs-vsctl -- --columns=name,datapath_id,ports,fail_mode,protocols,stp_enable list Bridge $BR
+echo "--------------------------------------------------------------------"
+
+echo "----------------------------- Interface ----------------------------"
+ovs-vsctl -- --columns=name,ofport,link_state,link_speed list Interface
+echo "--------------------------------------------------------------------"
+
+echo "----------------------------- Controller ----------------------------"
+ovs-vsctl -- --columns=connection_mode,target list Controller
+echo "--------------------------------------------------------------------"
+
+echo "----------------------------- Flows ----------------------------"
+ovs-ofctl dump-flows $BR
+```
+
+
+## docker-quagga.sh
+```
+#!/bin/bash
+# clean
+docker rm -f h1 h2 s1 s2 s3
+
+# hosts
+docker run -ti -d --name h1 --net none --privileged snlab/dovs
+docker run -ti -d --name h2 --net none --privileged snlab/dovs
+
+# switches
+docker run -ti -d --name s1 --privileged snlab/dovs-quagga
+docker run -ti -d --name s2 --privileged snlab/dovs-quagga
+docker run -ti -d --name s3 --privileged snlab/dovs-quagga
+
+# get network namespace
+h1ns=$(docker inspect --format '{{.State.Pid}}' h1)
+h2ns=$(docker inspect --format '{{.State.Pid}}' h2)
+s1ns=$(docker inspect --format '{{.State.Pid}}' s1)
+s2ns=$(docker inspect --format '{{.State.Pid}}' s2)
+s3ns=$(docker inspect --format '{{.State.Pid}}' s3)
+
+# add links
+nsenter -t $h1ns -n ip link add e0 type veth peer name e0 netns $s1ns
+nsenter -t $s1ns -n ip link add e1 type veth peer name e1 netns $s3ns
+nsenter -t $s1ns -n ip link add e2 type veth peer name e0 netns $s2ns
+nsenter -t $s2ns -n ip link add e1 type veth peer name e0 netns $s3ns
+nsenter -t $s3ns -n ip link add e2 type veth peer name e0 netns $h2ns
+
+# configure ovs
+docker exec s1 service openvswitch-switch start
+docker exec s1 ovs-vsctl add-br s
+docker exec s1 ovs-vsctl add-port s e0
+docker exec s1 ovs-vsctl add-port s e1
+docker exec s1 ovs-vsctl add-port s e2
+docker exec s1 ovs-vsctl add-port s i0 -- set interface i0 type=internal
+docker exec s1 ovs-vsctl add-port s i1 -- set interface i1 type=internal
+docker exec s1 ovs-vsctl add-port s i2 -- set interface i2 type=internal
+docker exec s1 ifconfig r
+docker exec s1 ifconfig i1 10.0.2.1/24
+docker exec s1 ifconfig i2 10.0.3.1/24
+
+docker exec s2 service openvswitch-switch start
+docker exec s2 ovs-vsctl add-br s
+docker exec s2 ovs-vsctl add-port s e0
+docker exec s2 ovs-vsctl add-port s e1
+docker exec s2 ovs-vsctl add-port s i0 -- set interface i0 type=internal
+docker exec s2 ovs-vsctl add-port s i1 -- set interface i1 type=internal
+docker exec s2 ifconfig i0 10.0.3.2/24
+docker exec s2 ifconfig i1 10.0.4.1/24
+docker exec s2 ifconfig e0 0.0.0.0
+docker exec s2 ifconfig e1 0.0.0.0
+
+docker exec s3 service openvswitch-switch start
+docker exec s3 ovs-vsctl add-br s
+docker exec s3 ovs-vsctl add-port s e0
+docker exec s3 ovs-vsctl add-port s e1
+docker exec s3 ovs-vsctl add-port s e2
+docker exec s3 ovs-vsctl add-port s i0 -- set interface i0 type=internal
+docker exec s3 ovs-vsctl add-port s i1 -- set interface i1 type=internal
+docker exec s3 ovs-vsctl add-port s i2 -- set interface i2 type=internal
+docker exec s3 ifconfig i0 10.0.4.2/24
+docker exec s3 ifconfig i1 10.0.2.2/24
+docker exec s3 ifconfig i2 10.0.1.254/24
+docker exec s3 ifconfig e0 0.0.0.0
+docker exec s3 ifconfig e1 0.0.0.0
+docker exec s3 ifconfig e2 0.0.0.0
+
+# bring up ethx ports
+docker exec s1 ifconfig e0 0.0.0.0
+docker exec s1 ifconfig e1 0.0.0.0
+docker exec s1 ifconfig e2 0.0.0.0
+docker exec s2 ifconfig e0 0.0.0.0
+docker exec s2 ifconfig e1 0.0.0.0
+docker exec s3 ifconfig e0 0.0.0.0
+docker exec s3 ifconfig e1 0.0.0.0
+docker exec s3 ifconfig e2 0.0.0.0
+
+# configure host network
+nsenter -t $h1ns -n ifconfig e0 10.0.0.1/24
+nsenter -t $h2ns -n ifconfig e0 10.0.1.1/24
+nsenter -t $h1ns -n route add default gw 10.0.0.254
+nsenter -t $h2ns -n route add default gw 10.0.1.254
+
+# configure host iface mac
+docker exec h1 ifconfig e0 hw ether 00:00:00:00:00:01
+docker exec h2 ifconfig e0 hw ether 00:00:00:00:00:02
+
+# configure quagga
+nsenter -t $s1ns -m bash -c "echo $'interface i0\ninterface i1\ninterface i2\nrouter ospf\n network 10.0.0.0/24 area 0\n network 10.0.2.0/24 area 0\n network 10.0.3.0/24 area 0' >> /etc/quagga/ospfd.conf"
+nsenter -t $s1ns -m bash -c "echo $'interface i0\n ip address 10.0.0.254/24' >> /etc/quagga/zebra.conf"
+nsenter -t $s1ns -m bash -c "echo $'interface i1\n ip address 10.0.2.1/24' >> /etc/quagga/zebra.conf"
+nsenter -t $s1ns -m bash -c "echo $'interface i2\n ip address 10.0.3.1/24' >> /etc/quagga/zebra.conf"
+nsenter -t $s2ns -m bash -c "echo $'interface i0\ninterface i1\nrouter ospf\n network 10.0.3.0/24 area 0\n network 10.0.4.0/24 area 0' >> /etc/quagga/ospfd.conf"
+nsenter -t $s2ns -m bash -c "echo $'interface i0\n ip address 10.0.3.2/24' >> /etc/quagga/zebra.conf"
+nsenter -t $s2ns -m bash -c "echo $'interface i1\n ip address 10.0.4.1/24' >> /etc/quagga/zebra.conf"
+nsenter -t $s3ns -m bash -c "echo $'interface i0\ninterface i1\ninterface i2\nrouter ospf\n network 10.0.1.0/24 area 0\n network 10.0.4.0/24 area 0\n network 10.0.2.0/24 area 0' >> /etc/quagga/ospfd.conf"
+nsenter -t $s3ns -m bash -c "echo $'interface i0\n ip address 10.0.4.2/24' >> /etc/quagga/zebra.conf"
+nsenter -t $s3ns -m bash -c "echo $'interface i1\n ip address 10.0.2.2/24' >> /etc/quagga/zebra.conf"
+nsenter -t $s3ns -m bash -c "echo $'interface i2\n ip address 10.0.1.254/24' >> /etc/quagga/zebra.conf"
+
+# start quagga
+nsenter -t $s1ns -m -p -n -i zebra -d -f /etc/quagga/zebra.conf --fpm_format protobuf
+nsenter -t $s1ns -m -p -n -i ospfd -d -f /etc/quagga/ospfd.conf
+nsenter -t $s2ns -m -p -n -i zebra -d -f /etc/quagga/zebra.conf --fpm_format protobuf
+nsenter -t $s2ns -m -p -n -i ospfd -d -f /etc/quagga/ospfd.conf
+nsenter -t $s3ns -m -p -n -i zebra -d -f /etc/quagga/zebra.conf --fpm_format protobuf
+nsenter -t $s3ns -m -p -n -i ospfd -d -f /etc/quagga/ospfd.conf
+
+# set flow rules
+docker exec s1 ovs-ofctl del-flows s
+docker exec s1 ovs-ofctl add-flow s ip,in_port=1,ip_proto=89,actions=output:4
+docker exec s1 ovs-ofctl add-flow s arp,in_port=1,arp_tpa=10.0.0.254,actions=output:4
+docker exec s1 ovs-ofctl add-flow s in_port=4,actions=output:1
+docker exec s1 ovs-ofctl add-flow s ip,in_port=2,ip_proto=89,actions=output:5
+docker exec s1 ovs-ofctl add-flow s arp,in_port=2,arp_tpa=10.0.2.1,actions=output:5
+docker exec s1 ovs-ofctl add-flow s in_port=5,actions=output:2
+docker exec s1 ovs-ofctl add-flow s ip,in_port=3,ip_proto=89,actions=output:6
+docker exec s1 ovs-ofctl add-flow s arp,in_port=3,arp_tpa=10.0.3.1,actions=output:6
+docker exec s1 ovs-ofctl add-flow s in_port=6,actions=output:3
+
+docker exec s2 ovs-ofctl del-flows s
+docker exec s2 ovs-ofctl add-flow s ip,in_port=1,ip_proto=89,actions=output:3
+docker exec s2 ovs-ofctl add-flow s arp,in_port=1,arp_tpa=10.0.3.2,actions=output:3
+docker exec s2 ovs-ofctl add-flow s in_port=3,actions=output:1
+docker exec s2 ovs-ofctl add-flow s ip,in_port=2,ip_proto=89,actions=output:4
+docker exec s2 ovs-ofctl add-flow s arp,in_port=2,arp_tpa=10.0.4.1,actions=output:4
+docker exec s2 ovs-ofctl add-flow s in_port=4,actions=output:2
+
+docker exec s3 ovs-ofctl del-flows s
+docker exec s3 ovs-ofctl add-flow s ip,in_port=1,ip_proto=89,actions=output:4
+docker exec s3 ovs-ofctl add-flow s arp,in_port=1,arp_tpa=10.0.4.2,actions=output:4
+docker exec s3 ovs-ofctl add-flow s in_port=4,actions=output:1
+docker exec s3 ovs-ofctl add-flow s ip,in_port=2,ip_proto=89,actions=output:5
+docker exec s3 ovs-ofctl add-flow s arp,in_port=2,arp_tpa=10.0.2.2,actions=output:5
+docker exec s3 ovs-ofctl add-flow s in_port=5,actions=output:2
+docker exec s3 ovs-ofctl add-flow s ip,in_port=3,ip_proto=89,actions=output:6
+docker exec s3 ovs-ofctl add-flow s arp,in_port=3,arp_tpa=10.0.1.254,actions=output:6
+docker exec s3 ovs-ofctl add-flow s in_port=6,actions=output:3
+
+# copy fpmserver
+docker cp fpmserver s1:/
+docker cp fpmserver s2:/
+docker cp fpmserver s3:/
+
+# start fpmserver
+docker exec s1 /fpmserver/main.py &
+docker exec s2 /fpmserver/main.py &
+docker exec s3 /fpmserver/main.py &
+
+# configure openflow app
+docker exec s1 ovs-ofctl add-group s group_id:1,type=ff,bucket=watch_port=2,actions=output:2,bucket=watch_port=3,actions=resubmit\(,100\) -O OpenFlow11
+docker exec s1 ovs-ofctl add-flow s table=1,ip,nw_dst=10.0.1.0/24,actions=mod_dl_dst:00:00:00:00:00:02,group:1 -O OpenFlow11
+docker exec s1 ovs-ofctl add-flow s table=1,ip,nw_dst=10.0.0.0/24,actions=mod_dl_dst:00:00:00:00:00:01,output:1
+docker exec s2 ovs-ofctl add-flow s table=1,actions=resubmit\(,100\)
+docker exec s3 ovs-ofctl add-flow s table=1,actions=resubmit\(,100\)
+
+# configure openflow app
+docker exec s1 ovs-ofctl add-group s group_id:1,type=ff,bucket=watch_port=3,actions=output:3,bucket=watch_port=2,actions=resubmit\(,100\) -O OpenFlow11
+docker exec s1 ovs-ofctl add-flow s table=1,ip,nw_dst=10.0.1.0/24,actions=mod_dl_dst:00:00:00:00:00:02,group:1 -O OpenFlow11
+docker exec s1 ovs-ofctl add-flow s table=1,ip,nw_dst=10.0.0.0/24,actions=mod_dl_dst:00:00:00:00:00:01,output:1
+docker exec s2 ovs-ofctl add-flow s table=1,actions=resubmit\(,100\)
+docker exec s3 ovs-ofctl add-flow s table=1,actions=resubmit\(,100\)
+
+docker exec s1 ovs-ofctl add-flow s table=1,actions=resubmit\(,100\)
+docker exec s2 ovs-ofctl add-flow s table=1,actions=resubmit\(,100\)
+docker exec s3 ovs-ofctl add-flow s table=1,actions=resubmit\(,100\)
+
+```
+
+## Set up vxlan tunnel vxlan.sh
+[vxlan Tunnel] (https://gist.github.com/yulis/5c20aa7695fc859d357d2285d4c51e7d)
+```
+#!/bin/bash
+# On Host 192.168.100.25
+ovs-vsctl add-br testbr0
+ovs-vsctl add-port testbr0 tun1 -- set interface tun1 type=internal
+ifconfig tun1 172.17.17.1 netmask 255.255.255.0
+ovs-vsctl add-port testbr0 testvxlan0 -- set interface testvxlan0 type=vxlan options:remote_ip=192.168.100.24
+
+# On Host 192.168.100.24
+ovs-vsctl add-br testbr0
+ovs-vsctl add-port testbr0 tun1 -- set interface tun1 type=internal
+ifconfig tun1 172.17.17.2 netmask 255.255.255.0
+ovs-vsctl add-port testbr0 testvxlan0 -- set interface testvxlan0 type=vxlan options:remote_ip=192.168.100.25
+```
+
+
+## Set up vxlan tunnel vxlan.sh
+[vxlan Tunnel](https://gist.githubusercontent.com/tfherb71/a40206f8450a5a12f7a07eb36208a143/raw/4185803de98c231cf35d3c81a6bb9a1a62db9e05/vxlan%2520tunnels) 
+```
+#!/bin/bash
+#
+echo
+echo create .ssh directory on enpoint machine using private key 
+echo created by ssh-keygen on your two card.
+echo copy .ssh directory so you will have same key pair on both servers server1 and server2
+echo
+#
+# Endpoint1
+#
+ENDPOINT_1="192.168.122.90"
+ENDPOINT_2="192.168.122.91"
+
+echo ENDPOINT_1="192.168.122.90"
+echo ENDPOINT_2="192.168.122.91"
+
+TUNNEL_IP_1="40.1.1.1"
+TUNNEL_IP_2="40.1.1.2"
+
+echo TUNNEL_IP_1="40.1.1.1"
+echo TUNNEL_IP_2="40.1.1.2"
+
+ENDPOINTS_IP=("192.168.122.90" "192.168.122.91")
+
+
+PKEY=/home/therbert/.ssh/vmhost/id_vm_rsa
+
+SSH_OPTIONS="-i ${PKEY} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=error"
+
+function ssh_do() {
+    echo
+    echo "### "  ssh $@
+    ssh ${SSH_OPTIONS} $@
+}
+
+
+for server in "${!ENDPOINTS_IP[@]}"; do
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-ofctl del-flows br0
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-ofctl del-flows br1
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-vsctl del-br br1
+done
+
+for server in "${!ENDPOINTS_IP[@]}"; do
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-vsctl del-port br0 sw0p0
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-vsctl add-br br1
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-vsctl add-port br1 sw0p0 -- set interface sw0p0 ofport_request=101
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-vsctl add-port br1 tep0 -- set interface tep0 type=internal
+done
+#
+# Server 1 create vtep
+#
+ssh ${SSH_OPTIONS} root@${ENDPOINT_1}\
+    ip addr add ${TUNNEL_IP_1} dev tep0
+#
+# Server 2 create vtep
+#
+ssh ${SSH_OPTIONS} root@${ENDPOINT_2}\
+    ip addr add ${TUNNEL_IP_2} dev tep0
+#
+# Servers 1 and 2 set ports and tunnels
+#
+for server in "${!ENDPOINTS_IP[@]}"; do
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        ip link set tep0 up
+    ssh_do root@${ENDPOINTS_IP[${server}]}\
+        /opt/bin/ovs-vsctl add-port br0 vxlan0 -- set interface vxlan0 type=vxlan\
+        options:remote_ip=flow options:key=flow options:dest_port=4789
+done
+
+#
+# Set flows in both endpoints for vxlan tunnel
+#
+echo
+echo Set flows on endpoints.
+echo
+for p in {0..1} ; do
+    tid=$(printf "%03d" ${p} 
+    ssh_do root@${ENDPOINT_1} /opt/bin/ovs-ofctl add-flow br0 \
+"in_port=sw0pf0vf${p},actions=set_tunnel=5${tid},set_field:${TUNNEL_IP_2}\-\>tun_dst,output:vxlan0"
+
+    ssh_do root@${ENDPOINT_2} /opt/bin/ovs-ofctl add-flow br0 \
+"in_port=sw0pf0vf${p},actions=set_tunnel=5${tid},set_field:${TUNNEL_IP_1}\-\>tun_dst,output:vxlan0"
+
+    ssh_do root@${ENDPOINT_1}\
+        /opt/bin/ovs-ofctl add-flow br0 in_port=vxlan0,tun_id=5${tid},actions=sw0pf0vf${p}
+    ssh_do root@${ENDPOINT_2}\
+        /opt/bin/ovs-ofctl add-flow br0 in_port=vxlan0,tun_id=5${tid},actions=sw0pf0vf${p}
+done
+
+```
+
+## set-multins-vlan-bond.sh
+```
+#!/bin/bash -eu
+#
+# VERSION: 0.7
+# AUTHOR: Mauro S. Oddi
+#
+# DESCRIPTION:
+#
+# Create a network environment similar to what OpenStack Neutron with the default
+# Neutorn/OvS ML2 plugin would create on a compute node for testing purposes.
+# The script will create bonding device, vlans, OvS and linux bridges, veth pairs,
+# 10 net namespaces with internal IPs that will be tunneled
+# in a VXLAN overlay. Here OpenStack would normally use OpenFlow flows to determine the path but this
+# case is simpler by using ports as alternative.
+#
+# NETWORK LAYOUT:
+#
+# PF - BOND - VLAN - OVS BRIDGE(br-ex) - OVS BRIDGE(br-tun) - VXLAN - OVS BRIDGE (br-int) - VETH - LINUXBRIDGE - TAP - VM
+#
+# TODO:
+#
+#  - Alternatively VLAN Tagging can be managed by OvS (br-ex) directly but this is not implemented here yet
+#
+#
+# VARIABLES:
+#
+# IP:     <VTEP IP address>
+# INTIP:  <Internal NS IP>
+# EXNIC:  <bond_name>
+# SLAVES: <bond slaves>
+#
+#
+
+IP=172.16.0.3
+INTIP=192.168.200.3
+# To set wihtout bond use p2p1 as EXNIC
+EXNIC=bond0
+SLAVES="p2p1 p2p2"
+VLANID=1001
+
+MTU=1500
+#NETNS=vmns0
+
+NSLIST=( vmns10 vmns9 vmns8 vmns7 vmns6 vmns5 vmns4 vmns3 vmns2 vmns1 vmns0 )
+
+
+function reset() {
+
+	echo "Cleanup all"
+        # Delete namespaces
+	for I_NS in ${NSLIST[@]}; do
+		ip netns del $I_NS
+		ip link del veth0-$I_NS
+	done
+        # Delete OvS bridges br-int and br-tun
+	ovs-vsctl del-br br-int
+	ip link del br-int
+	ovs-vsctl del-br br-tun
+	ip link del br-tun
+	ovs-vsctl del-port br-ex vtep0
+	if [[ -z $VLANID ]]; then
+	    # Unplug from br-ex and delete vlan device
+	    ovs-vsctl del-port br-ex ${EXNIC}.${VLANID}
+	    ip link del ${EXNIC}.{$VLANID}
+	else
+	    # Unplug from br-ex and remove external interface
+            ovs-vsctl del-port br-ex $EXNIC
+	fi
+	if [[ $EXNIC = "bond0" ]]; then
+		 ip link del $EXNIC
+		 for I_SLAVE in $SLAVES; do
+			ip a f dev $I_SLAVE
+		 done
+	else
+		ip a f dev $EXNIC
+	fi
+        # Delete vxlan dev if it is was created outside OvS
+	#ip link del vxlan10
+        # Delete OvS bridge br-ex
+	ovs-vsctl del-br br-ex
+	ip link del br-tun
+
+}
+
+# Set IP on external interface
+function setphysnet() {
+
+	echo "Setting phyisical NIC $NIC ($MTU)"
+	ip address add ${IP}/24 dev $EXNIC
+	ip link set $ENNIC mtu $MTU
+	ip link set $EXNIC up
+
+}
+
+
+# Setup bond interface
+function setbond() {
+
+	local BONDNIC=$1
+	shift 1
+	local SLAVENICS=$@
+
+	echo "Setting active-passive bond $BONDNIC with $SLAVENICS ($MTU)"
+
+	# Clean if exists
+	ip link del $BONDNIC
+	ip link add $BONDNIC type bond
+	ip link set $BONDNIC type bond miimon 100 mode active-backup
+	for I_NIC in $SLAVENICS; do
+		ip link set $I_NIC down
+		ip link set $I_NIC master $BONDNIC
+	done
+	ip link set $BONDNIC mtu $MTU
+	ip link set $BONDNIC up
+#	ip address add ${IP}/24 dev $BONDNIC
+
+}
+
+
+# Setup vxlan interface (if we use OvS this is not required)
+function setvxlan() {
+	echo "Setting VXLAN tunnels in linux br"
+	# set tunnel to C
+	ip link add vxlan10 type vxlan id 10 dev $NIC remote 172.16.0.4 dstport 4789
+	ip link set vxlan10 mtu $(( $MTU - 50 ))
+	ip link set vxlan10 up
+	# set tunnel to A
+	#ip link add vxlan11 type vxlan id 11 dev $NIC remote 172.16.0.2 dstport 4789
+	#ip link set vxlan11 mtu $(( $MTU - 50 ))
+	#ip link set vxlan11 up
+}
+
+
+# integration bridge with linux br
+function setbrint() {
+	echo "Creating linux bridge with VTEP"
+	ip link add br-int type bridge
+	ip link set br-int up
+	# add the vxlan port
+	ip link set vxlan10 master br-int
+	#ip link set vxlan11 master br-int
+}
+
+# Create vlan device
+function setvlan() {
+	echo "Creating kernel vlan device"
+        ip link add name $EXNIC link ${EXNIC}.${VLANID} type vlan id $VLANID
+}
+
+# Create external bridge
+function setbrex() {
+	echo "Creating OvS bridge for external traffic br-ex and VTEP"
+	ovs-vsctl add-br br-ex
+	if [[ -z $VLANID ]]; then
+	    ovs-vsctl add-port br-ex $EXNIC.$VLANID
+	else
+	    ovs-vsctl add-port br-ex $EXNIC
+	fi
+	ovs-vsctl add-port br-ex vtep0  \
+	    	-- set interface vtep0 type=internal
+	ip link set vtep0 up
+	ip a a ${IP}/24 dev vtep0
+}
+
+
+# Create tunnel bridge
+function setbrtun() {
+	echo "Creating OvS bridge for tunnel traffic br-tun and VXLAN tunnel"
+	ovs-vsctl add-br br-tun
+	ovs-vsctl add-port br-tun vxlan10 \
+		-- set interface vxlan10 type=vxlan \
+		   options:remote_ip=172.16.0.4 \
+		   options:key=5000 \
+		   options:dst_port=4789
+	#ovs-vsctl add-port br-tun vtep0 \
+	#	-- set interface vtep0 type=internal
+	#ip link set vtep0 mtu $(( $MTU - 50 ))
+	# ip address add 192.168.1.2/24 dev vtep0
+
+}
+
+# Create interconnection bridge and patch it to the br-tun
+function setbrint() {
+	echo "Creating OcS bridge for internal traffic br-int and patch to br-tun"
+	ovs-vsctl add-br br-int
+	ovs-vsctl add-port br-int patch-br-tun \
+		-- set interface patch-br-tun type=patch \
+		   options:peer=patch-br-int
+	ovs-vsctl add-port br-tun patch-br-int \
+		-- set interface patch-br-int type=patch \
+		   options:peer=patch-br-tun
+}
+
+# Create the netns and veths for test interface based on ID passed
+function setns() {
+
+	local NETNS=vmns$1
+	local IPNS=192.168.$(( 100 + $1 )).3
+	local REMOTEIPNS=192.168.$(( 100 + $1 )).4
+
+	echo "Craating NS $NETNS - $IPNS"
+	ip netns add $NETNS
+	#NSLIST+=( $NETNS )
+	ip link add veth0-$NETNS type veth peer name veth1-$NETNS
+	ip link set veth0-$NETNS mtu $(( $MTU - 50 ))
+	ip link set veth1-$NETNS mtu $(( $MTU - 50 ))
+	ovs-vsctl add-port br-int veth0-$NETNS
+	ip link set veth0-$NETNS up
+	ip link set veth1-$NETNS netns  $NETNS
+	ip netns exec $NETNS ip link set veth1-$NETNS name eth0
+	ip netns exec $NETNS ip address add ${IPNS}/24 dev eth0
+	ip netns exec $NETNS ip link set eth0 up
+	return 0
+
+}
+
+# Run iperf on existing NS
+function runns() {
+	local NETNS=vmns$1
+	local IPNS=192.168.$(( 100 + $1 )).3
+	local REMOTEIPNS=192.168.$(( 100 + $1 )).4
+
+	echo "Running on NS $NETNS - Command: iperf -s $IPNS \&"
+	ip netns exec $NETNS iperf3 -s $IPNS  &
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && echo "iperf3 listening on IP  $IPNS" || echo "failed to run iperf3 -s on $IPNS" >&2
+	return $RETVAL
+}
+
+# Create multiple test namespaces
+function set_multiple_ns() {
+	for I_NS in {1..10} ;  do
+		setns  $I_NS
+	done
+}
+
+# Run command in multiple test namespaces
+function run_multiple_ns() {
+	for I_NS in {1..10} ;  do
+		runns  $I_NS
+		sleep 1
+	done
+
+}
+
+# MAIN
+function main() {
+	reset
+	setbond $EXNIC $SLAVES
+	#setvlan
+	setbrex
+	setbrtun
+	setbrint
+	#setns
+	set_multiple_ns
+	run_multiple_ns
+
+}
+main
+#EOS
+
+```

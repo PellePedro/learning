@@ -1,4 +1,73 @@
 # OVS Cheet Sheet
+## Links
+[Faucet SDN Controller](https://github.com/faucetsdn/faucet/blob/master/docker/runtests.sh)<BR/>
+
+## OVS Controllers
+```
+ovs-vsctl add-br hwbr &&
+ovs-vsctl set-controller hwbr tcp:127.0.0.1:6653 tcp:127.0.0.1:6654 
+
+```
+## Magma
+[Magma](https://github.com/magma/magma/blob/master/lte/gateway/python/scripts/setup_metering_ovs)
+```
+#!/bin/bash
+# simple script to set up a test environment for metering.
+# two namespaces connected by a virtual switch, pointing at a local OF
+# controller.
+sudo ip netns add left
+sudo ip netns add right
+sudo ip link add veth01 type veth peer name veth10
+sudo ip link set veth01 netns left                                                                                                                                                             
+sudo ip link set veth10 up
+sudo ip link add veth02 type veth peer name veth20                                                                                                                                             
+sudo ip link set veth02 netns right                                                                                                                                                            
+sudo ip link set veth20 up                                                                                                                                                                     
+sudo ovs-vsctl add-br vswitch
+sudo ovs-vsctl set-fail-mode vswitch secure                                                                                                                                                    
+sudo ovs-vsctl add-port vswitch veth10
+sudo ovs-vsctl add-port vswitch veth20
+sudo ip netns exec left ifconfig veth01 192.168.201.1 up                                                                                                                                       
+sudo ip netns exec left route add -net 192.168.202.0/24 gw 192.168.201.1
+sudo ip netns exec right ifconfig veth02 192.168.202.1 up
+sudo ip netns exec right route add -net 192.168.201.0/24 gw 192.168.202.1
+# set the controller to a default localhost controller
+sudo ovs-vsctl set-controller vswitch tcp:127.0.0.1:6633
+# set the vswitch to use openflow 1.0 and 1.4
+# we need 1.0 apparently for ovs-ofctl to work, and flow_stats
+# doesn't work in 1.5
+sudo ovs-vsctl set bridge vswitch protocols=OpenFlow10,OpenFlow14
+```
+
+```
+#!/bin/bash
+# simple script to set up a test environment for metering.
+# two namespaces connected by a virtual switch, pointing at a local OF
+# controller.
+sudo ip netns add left
+sudo ip netns add right
+sudo ip link add veth01 type veth peer name veth10
+sudo ip link set veth01 netns left                                                                                                                                                             
+sudo ip link set veth10 up
+sudo ip link add veth02 type veth peer name veth20                                                                                                                                             
+sudo ip link set veth02 netns right                                                                                                                                                            
+sudo ip link set veth20 up                                                                                                                                                                     
+sudo ovs-vsctl add-br vswitch
+sudo ovs-vsctl set-fail-mode vswitch secure                                                                                                                                                    
+sudo ovs-vsctl add-port vswitch veth10
+sudo ovs-vsctl add-port vswitch veth20
+sudo ip netns exec left ifconfig veth01 192.168.201.1 up                                                                                                                                       
+sudo ip netns exec left route add -net 192.168.202.0/24 gw 192.168.201.1
+sudo ip netns exec right ifconfig veth02 192.168.202.1 up
+sudo ip netns exec right route add -net 192.168.201.0/24 gw 192.168.202.1
+# set the controller to a default localhost controller
+sudo ovs-vsctl set-controller vswitch tcp:127.0.0.1:6633
+# set the vswitch to use openflow 1.0 and 1.4
+# we need 1.0 apparently for ovs-ofctl to work, and flow_stats
+# doesn't work in 1.5
+sudo ovs-vsctl set bridge vswitch protocols=OpenFlow10,OpenFlow14
+
+```
 
 ## VLAN trunk
 ```

@@ -1,6 +1,7 @@
 # OVS Cheet Sheet
 ## Links
 [Faucet SDN Controller](https://github.com/faucetsdn/faucet/blob/master/docker/runtests.sh)<BR/>
+[OVS With Layer 3 Routing](https://groups.geni.net/geni/wiki/HowTo/ConfigureOVSWithLayer3Routing)<BR/>
 
 ## OVS Controllers
 ```

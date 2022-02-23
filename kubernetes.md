@@ -14,7 +14,7 @@
 [Openflow Specification 1.5](https://opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf)
 
 ### Openflow golang library
-[Openflow](https://github.com/antrea-io/libOpenflow)<BR/>
-[Ofnet](https://github.com/antrea-io/ofnet)
+[libOpenflow](https://github.com/antrea-io/libOpenflow)<BR/>
+[ofnet](https://github.com/antrea-io/ofnet)
 
 ## OVS

@@ -11,7 +11,7 @@
 [Antrea Live CNI Presentation](https://www.youtube.com/watch?v=XgT2VlRF9ho&list=PLuzde2hYeDBfHDD0zMbmG4QoVaSbkJChZ)
 
 # Open vSwitch
-[Open vSwitch](https://www.openvswitch.org/)
+[OVS](https://www.openvswitch.org/)
 
 ## Openflow
 [Openflow Specification 1.5](https://opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf)

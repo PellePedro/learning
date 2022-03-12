@@ -1,6 +1,6 @@
 # Books
 [Programming Kubernetes](https://www.oreilly.com/library/view/programming-kubernetes/9781492047094/)<BR/>
-<img src="https://images-na.ssl-images-amazon.com/images/I/41aCLSoR+2L._SX379_BO1,204,203,200_.jpg" width="200" />
+<img src="https://learning.oreilly.com/library/cover/9781492047094/250w/" width="250" />
 <BR/>
 [Networking and Kubernetes](https://www.oreilly.com/library/view/networking-and-kubernetes/9781492081647/)<BR/>
 <img src="https://learning.oreilly.com/library/cover/9781492081647/250w/" width="250" />

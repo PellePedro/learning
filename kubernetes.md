@@ -1,12 +1,9 @@
 # Books
-[Programming Kubernetes](https://www.oreilly.com/library/view/programming-kubernetes/9781492047094/)<BR/>
-<img src="https://learning.oreilly.com/library/cover/9781492047094/250w/" width="250" />
-<br/>
-[Networking and Kubernetes](https://www.oreilly.com/library/view/networking-and-kubernetes/9781492081647/)<BR/>
-<img src="https://learning.oreilly.com/library/cover/9781492081647/250w/" width="250" />
-<br/>
-[Kubernetes up and Running](https://www.oreilly.com/library/view/kubernetes-up-and/9781098110192/)<BR/>
-<img src="https://learning.oreilly.com/library/cover/9781098110192/250w/" width="250" />
+
+| [Programming Kubernetes](https://www.oreilly.com/library/view/programming-kubernetes/9781492047094/)          | [Networking and Kubernetes](https://www.oreilly.com/library/view/networking-and-kubernetes/9781492081647/) | [Kubernetes up and Running](https://www.oreilly.com/library/view/kubernetes-up-and/9781098110192/) 
+|----------|-------------|:------:|
+| <img src="https://learning.oreilly.com/library/cover/9781492047094/250w/" width="250" /> | <img src="https://learning.oreilly.com/library/cover/9781492081647/250w/" width="250" /> | <img src="https://learning.oreilly.com/library/cover/9781098110192/250w/" width="250" /> |
+
 # Specifications
 ## Container Networking
 [Container Networking](https://github.com/containernetworking/cni/blob/master/SPEC.md)<BR/>

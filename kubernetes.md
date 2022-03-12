@@ -7,7 +7,7 @@
 # Specifications
 
 | [Container Networking Interface](https://github.com/containernetworking/cni/blob/master/SPEC.md) |
- [Open VSwitch](https://www.openvswitch.org/)|
+ [Open VSwitch](https://www.openvswitch.org/) |
  [Openflow Specification 1.5](https://opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf)
 |----------|-------------|:------:|
 | <img src="https://avatars.githubusercontent.com/u/18357459?s=200&v=4" /> |

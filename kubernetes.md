@@ -5,18 +5,15 @@
 | <img src="https://learning.oreilly.com/library/cover/9781492047094/250w/" width="250" /> | <img src="https://learning.oreilly.com/library/cover/9781492081647/250w/" width="250" /> | <img src="https://learning.oreilly.com/library/cover/9781098110192/250w/" width="250" /> |
 
 # Specifications
-## Container Networking
-[CNI](https://github.com/containernetworking/cni/blob/master/SPEC.md)<BR/>
+
+| [Container Networking Interface](https://github.com/containernetworking/cni/blob/master/SPEC.md) |
+ [Open VSwitch](https://www.openvswitch.org/)|
+ [Openflow Specification 1.5](https://opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf)
+ 
 <img src="https://avatars.githubusercontent.com/u/18357459?s=200&v=4" /><br/>
+|----------|-------------|:------:|
+| <img src="https://avatars.githubusercontent.com/u/18357459?s=200&v=4" /> |
+ <img src="http://www.openvswitch.org/assets/vswitch.png" width="250" /> ||
 
-# Open vSwitch
-[OVS](https://www.openvswitch.org/)
-
-## Openflow
-[Openflow Specification 1.5](https://opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf)
-
-### Openflow golang library
-[libOpenflow](https://github.com/antrea-io/libOpenflow)<BR/>
-[ofnet](https://github.com/antrea-io/ofnet)
 
 

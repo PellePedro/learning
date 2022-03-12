@@ -1,5 +1,7 @@
 # Books
 [Programming Kubernetes](https://www.oreilly.com/library/view/programming-kubernetes/9781492047094/)<BR/>
+<img src="https://images-na.ssl-images-amazon.com/images/I/41aCLSoR+2L._SX379_BO1,204,203,200_.jpg" width="200" />
+
 [Networking and Kubernetes](https://www.oreilly.com/library/view/networking-and-kubernetes/9781492081647/)<BR/>
 [Kubernetes up and Running](https://www.oreilly.com/library/view/kubernetes-up-and/9781098110192/)<BR/>
 

@@ -24,7 +24,7 @@ pub fn sublist<T: PartialEq>(_first_list: &[T], _second_list: &[T]) -> Compariso
         return Comparison::Sublist
     }
     if _second_list.len() == 0 {
-        return Comparison::Sublist  
+        return Comparison::Superlist  
     }
     Comparison::Unequal
 }

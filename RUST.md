@@ -1,8 +1,11 @@
 # Enums
 
-## Sublist
+## Hints
 
-```
+<details>
+  <summary>Sublist</summary>
+  
+  ```rust
 https://exercism.org/tracks/rust/exercises/sublist
 
 #[derive(Debug, PartialEq)]
@@ -41,6 +44,6 @@ pub fn sublist<T: PartialEq>(_first_list: &[T], _second_list: &[T]) -> Compariso
         }
     }
 }
+  ```
+</details>
 
-
-```

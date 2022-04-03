@@ -20,3 +20,16 @@
   ```
   
 </details>
+
+<details>
+  <summary>Git Submodules</summary>
+
+  ```
+  git init .
+  git submodule add git-repo
+  git add .gitmodules
+  git add .
+  git comit -m "Added submodules"
+  ```
+  
+</details>

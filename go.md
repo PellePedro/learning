@@ -32,15 +32,15 @@
 
   PROTOC_RUN = docker run --rm -v $(shell pwd):/contracts -w /contracts $(PROTOC_IMAGE) -I.
 
-  all: generate
+  all: cni
 
-  generate: cni
-
-  cni:
+  cni: ## generates stubs for protobuf pkg/api/cni/v1beta1/cni.proto 
 	  @echo "+ $@"
-	  @$(PROTOC_RUN) --go_out=plugins=grpc,paths=source_relative:. cni/cni.proto
+	  @$(PROTOC_RUN) --go_out=plugins=grpc,paths=source_relative:. \
+	 --grpc-gateway_out=logtostderr=true,paths=source_relative:. \
+	 --openapiv2_out=logtostderr=true:. pkg/api/cni/v1beta1/cni.proto
 
-  .PHONY: all cni generate
+  .PHONY: cni
   ```
   </details>
   

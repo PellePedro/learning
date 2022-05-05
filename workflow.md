@@ -9,6 +9,13 @@ export MODULE=distributed.edge.vmware.com/oga-controller
 go mod init ${MODULE}
 ```
 
+## Add Common Dependencies
+```
+go get github.com/sirupsen/logrus
+
+```
+
+
 # Create a Makefile
 ```
 DOCKER_IMAGE=dei.mcse.vmware.com/oga-controller:0.0.1

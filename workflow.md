@@ -1,4 +1,3 @@
-
 # Create new Git repository
 ```
 git init .
@@ -7,16 +6,12 @@ git init .
 # Create new go module for component
 ```
 export MODULE=distributed.edge.vmware.com/oga-controller
-cat << EOF | bash -c "\
-go mod init \$MODULE
-"
-EOF
+go mod init ${MODULE}
 ```
 
 # Create a Makefile
 ```
-1
-
+DOCKER_IMAGE=dei.mcse.vmware.com/oga-controller:0.0.1
 module_name := $$(head -n 1 go.mod | awk '{print $$2 }')
 build-arg+=--build-arg MODULE_NAME=$(module_name)
 

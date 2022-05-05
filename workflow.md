@@ -12,8 +12,9 @@ go mod init ${MODULE}
 # Create a Makefile
 ```
 DOCKER_IMAGE=dei.mcse.vmware.com/oga-controller:0.0.1
+
 module_name := $$(head -n 1 go.mod | awk '{print $$2 }')
-build-arg+=--build-arg MODULE_NAME=$(module_name)
+build-arg+=--build-arg MODULE_NAME=$(module_name) 
 
 .PHONY help:
 help: ## Display this help.
@@ -46,10 +47,15 @@ build-image: ## Build Container Image
 ```
 
 
-## Create Dockerfile
+## Create multi-stage docker build file (Dockerfile)
 ```
-ARG GO_VERSION
-FROM golang:1.17.5 as builder
+FROM golang:1.18.1-alpine as buildbase
+
+RUN apk update \
+  && apk add git \
+  && apk add gcc \
+  && apk add libc-dev \
+  && go install github.com/go-delve/delve/cmd/dlv@latest
 
 ARG MODULE_NAME
 
@@ -57,10 +63,62 @@ WORKDIR ${MODULE_NAME}
 COPY . ${MODULE_NAME}
 
 RUN go mod download
+RUN go build -gcflags="all=-N -l" -o /release/server ./cmd
 
-FROM SCRATCH as production
+```
 
 
 
 
+
+## Sample Http server
+
+Add file cmd/main.go
+```
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
+	"github.com/gorilla/mux"
+)
+
+const (
+	readTimeout  = 5
+	writeTimeout = 10
+	idleTimeout  = 120
+)
+
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	returnStatus := http.StatusOK
+	w.WriteHeader(returnStatus)
+	message := fmt.Sprintf("Hello %s!", r.UserAgent())
+	w.Write([]byte(message))
+}
+
+func main() {
+	serverAddress := ":8080"
+	l := log.New(os.Stdout, "sample-srv ", log.LstdFlags|log.Lshortfile)
+	m := mux.NewRouter()
+
+	m.HandleFunc("/", indexHandler)
+
+	srv := &http.Server{
+		Addr:         serverAddress,
+		ReadTimeout:  readTimeout * time.Second,
+		WriteTimeout: writeTimeout * time.Second,
+		IdleTimeout:  idleTimeout * time.Second,
+		Handler:      m,
+	}
+
+	l.Println("server started")
+	if err := srv.ListenAndServe(); err != nil {
+		panic(err)
+	}
+}
 ```

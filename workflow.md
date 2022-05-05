@@ -44,3 +44,23 @@ build-image: ## Build Container Image
 	@echo "Building image: $(DOCKER_IMAGE)."
 	@docker build --progress plain --force-rm $(build-arg) -t $(DOCKER_IMAGE) .
 ```
+
+
+## Create Dockerfile
+```
+ARG GO_VERSION
+FROM golang:1.17.5 as builder
+
+ARG MODULE_NAME
+
+WORKDIR ${MODULE_NAME}
+COPY . ${MODULE_NAME}
+
+RUN go mod download
+
+FROM SCRATCH as production
+
+
+
+
+```

@@ -18,7 +18,7 @@ git init .
 ```
 
 # Create new go module for component
-```
+```bash
 export MODULE=distributed.edge.vmware.com/oga-controller
 go mod init ${MODULE}
 ```

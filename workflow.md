@@ -43,23 +43,31 @@ help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 
-# ============= Go ==============
-.PHONY fmt:
+# ============= Go veting, linting, unit testing, debug build ==============
+.PHONY: fmt
 fmt: ##
 	go fmt
 
-.PHONY vet:
+.PHONY: vet
 vet: ##
 	go vet
 
-.PHONY lint:
+.PHONY: lint
 lint: ##
 	go lint
 
-.PHONY test:
+.PHONY: test
 test:
 	go test ./...
 
+.PHONY: go-build
+go-build: main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-w' -o main ./main.go
+
+.PHONY: debug-build
+debug-build: main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -gcflags="all=-N -l" -o main-debug ./main.go
+	
 # ============= Docker ===================
 .PHONY: build-image
 build-image: ## Build Container Image
@@ -109,6 +117,22 @@ COPY . ${MODULE_NAME}
 RUN go mod download
 RUN go build -gcflags="all=-N -l" -o /release/server ./cmd
 
+```
+
+```
+FROM golang:1.18.1-alpine as buildbase
+COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
+WORKDIR ${MODULE_NAME}
+COPY go.mod ${MODULE_NAME}
+COPY go.sum ${MODULE_NAME}
+COPY cmd ${MODULE_NAME}/cmd
+COPY pkg ${MODULE_NAME}/pkg
+
+RUN go mod download
+# Build with debug info
+RUN go build -gcflags="all=-N -l" -o /usr/local/bin/server ./cmd
+
+CMD [/usr/local/bin/server]
 ```
 
 

@@ -29,6 +29,29 @@ go get github.com/sirupsen/logrus
 
 ```
 
+# Add liniting rules for golangci
+```yaml
+cat <<-EOF > .golangci.yaml
+run:
+  tests: false
+  skip-dirs:
+    - pkg/mock/testdata
+
+output:
+  sort-results: true
+
+# use default linters and some additional linters for now
+linters:
+  enable:
+    - goconst
+    - goheader
+    - goimports
+    - makezero
+    - misspell
+    - nilerr
+    - whitespace
+EOF
+```
 
 # Create a Makefile
 ```

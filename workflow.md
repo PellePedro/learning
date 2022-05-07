@@ -165,9 +165,8 @@ CMD [/usr/local/bin/server]
 
 [](https://github.com/banjintaohua/docker/tree/master/Go/build)
 ```Dockerfile
-# Stage 1: Build server
-
-FROM golang:${GO_VERSION:-1.18.1-alpine}
+# syntax=docker/dockerfile:1.4
+FROM golang:${GO_VERSION:-1.18.1-alpine} as stage1
 COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
 COPY --from=golangci/golangci-lint:v1.45.0-alpine /usr/bin/golangci-lint /usr/bin/golangci-lint
 
@@ -183,9 +182,11 @@ RUN go mod download
 golangci-lint run --timeout 10m0s ./...
 
 
-RUN go build -gcflags="all=-N -l" -o /release/server \
-    && cp entrypoint.sh /release/entrypoint.sh \
-    && chmod +x /release/entrypoint.sh
+RUN <<EOF
+go build -gcflags="all=-N -l" -o /release/server
+cp entrypoint.sh /release/entrypoint.sh
+chmod +x /release/entrypoint.sh
+EOF
 
 # Stage 3: run server with dlv
 FROM golang:${GO_VERSION:-1.17.3-alpine} as runner

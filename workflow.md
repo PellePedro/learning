@@ -66,30 +66,31 @@ help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 
-# ============= Go veting, linting, unit testing, debug build ==============
+# ----------------------------------------------------------------------------------
+# General build
 .PHONY: fmt
-fmt: ##
-	go fmt
+fmt: ## Run go formatting
+	go fmt ./...
 
 .PHONY: vet
-vet: ##
-	go vet
+vet: ## Run go veting
+	go vet ./...
 
 .PHONY: lint
-lint: ##
-	go lint
+lint: ## Run go linting
+	go golangci-lint rung ./...
 
 .PHONY: test
-test:
-	go test ./...
+test: ## Run go testing
+	go test -v ./...
 
 .PHONY: go-build
-go-build: main.go
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-w' -o main ./main.go
+go-build: main.go ## Compile for Release
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-w' -o main ./cmd/main.go
 
 .PHONY: debug-build
-debug-build: main.go
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -gcflags="all=-N -l" -o main-debug ./main.go
+debug-build: main.go ## Compile for Debug
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -gcflags="all=-N -l" -o main-debug ./cmd/main.go
 	
 # ============= Docker ===================
 .PHONY: build-image

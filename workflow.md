@@ -101,6 +101,10 @@ build-image: ## Build Container Image
 
 
 ## Create multi-stage docker build file (Dockerfile)
+
+### Awesome Multistage Build Files
+[Concurrent Mining](https://github.com/ahmetson/concurrent-mining)<BR/>
+
 ### Links
 [VS Code Go Debug](https://github.com/mipnw/vscode-go-debug/blob/main/Dockerfile)<BR/>
 ```
@@ -162,11 +166,23 @@ CMD [/usr/local/bin/server]
 [](https://github.com/banjintaohua/docker/tree/master/Go/build)
 ```Dockerfile
 # Stage 1: Build server
+
 FROM golang:${GO_VERSION:-1.18.1-alpine}
 COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
-ADD . /build
+COPY --from=golangci/golangci-lint:v1.45.0-alpine /usr/bin/golangci-lint /usr/bin/golangci-lint
 
 WORKDIR /build
+ADD go.mod .
+ADD go.sum .
+ADD cmd ./cmd
+ADD pkg ./pkg
+ADD .golangci.yml .
+
+RUN go mod download
+
+golangci-lint run --timeout 10m0s ./...
+
+
 RUN go build -gcflags="all=-N -l" -o /release/server \
     && cp entrypoint.sh /release/entrypoint.sh \
     && chmod +x /release/entrypoint.sh

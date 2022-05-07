@@ -159,6 +159,67 @@ RUN go build -gcflags="all=-N -l" -o /usr/local/bin/server ./cmd
 CMD [/usr/local/bin/server]
 ```
 
+[](https://github.com/banjintaohua/docker/tree/master/Go/build)
+```Dockerfile
+# Stage 1: Build server
+FROM golang:${GO_VERSION:-1.18.1-alpine}
+COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
+ADD . /build
+
+WORKDIR /build
+RUN go build -gcflags="all=-N -l" -o /release/server \
+    && cp entrypoint.sh /release/entrypoint.sh \
+    && chmod +x /release/entrypoint.sh
+
+# Stage 3: run server with dlv
+FROM golang:${GO_VERSION:-1.17.3-alpine} as runner
+
+WORKDIR /
+COPY --from=builder /release /release
+
+# Health check by curl
+RUN apk update \
+  && apk add curl tzdata \
+  && rm -rf /tmp/* /var/cache/apk/*
+
+EXPOSE 2345 8080
+
+# CMD ["/release/dlv", "--listen=:2345", "--headless=true", "--check-go-version=false", "--api-version=2", "--accept-multiclient", "exec", "/release/server"]
+ENTRYPOINT ["/release/entrypoint.sh"]
+
+```
+entrypoint.sh
+```bash
+#!/usr/bin/env sh
+
+set -e
+health_check() {
+  if [ "$(curl -f http://localhost:8080)" -ne 0 ]; then
+    echo "Application startup failed. Exiting."
+    exit 1
+  fi
+  echo "Application startup successful."
+  return 0
+}
+
+case "$1" in
+"dev")
+  dlv --listen=:2345 --headless=true --check-go-version=false --api-version=2 --accept-multiclient exec /release/server || health_check
+  ;;
+"run")
+  /release/server || health_check
+  ;;
+"health")
+  health_check
+  ;;
+*)
+  exec "$@"
+  ;;
+esac
+
+```
+
+
 
 
 

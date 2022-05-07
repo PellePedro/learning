@@ -17,7 +17,10 @@
 git init .
 ```
 
-# Create new go module for component
+# Developing a K8S Controller in GO
+
+## Create new go module for component
+
 ```bash
 export MODULE=distributed.edge.vmware.com/oga-controller
 go mod init ${MODULE}
@@ -29,6 +32,8 @@ go get github.com/sirupsen/logrus
 ```
 
 ## Add Kubernetes API Dependencies
+There are three go dependencies required to interact with the API Server.
+
 [Client Go](https://pkg.go.dev/k8s.io/client-go)<BR/>
 [k8s API](https://pkg.go.dev/k8s.io/api)<BR/>
 [k8s API Machinery](https://pkg.go.dev/k8s.io/apimachinery)<BR/>

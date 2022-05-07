@@ -49,16 +49,19 @@ run:
 
 output:
   sort-results: true
-
-# use default linters and some additional linters for now
 linters:
+  # because of go1.18
+  disable:
+    - gosimple
+    - staticcheck
+    - structcheck
+    - unused
   enable:
     - goconst
     - goheader
     - goimports
     - makezero
     - misspell
-    - nilerr
     - whitespace
 EOF
 ```

@@ -54,13 +54,13 @@ EOF
 ```
 
 # Create a Makefile
-```MAkefile
+```Makefile
 DOCKER_IMAGE=dei.mcse.vmware.com/oga-controller:0.0.1
 
 module_name := $$(head -n 1 go.mod | awk '{print $$2 }')
 build-arg+=--build-arg MODULE_NAME=$(module_name) 
 
-.PHONY help:
+.PHONY: help
 help: ## Display this help.
 	@echo $(module_name)
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)

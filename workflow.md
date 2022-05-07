@@ -1,3 +1,17 @@
+# Development from Beginning to Production
+
+## Table of Contents
+- Setting up CI/CD with k8s cluster
+- Setting up git for Project
+- Setting up go module for project
+- Setting up Makefile
+- Setting up Multi Stage Docker build file
+- Implementing a sample application in go accessing the Kubernetes API
+- Creating deployment descritors and using kuztomize
+- Compiling Application with debugging information
+- Deploying the application to local k8s cluster
+- Attaching code level debugger (dlv) for debugging  
+
 # Create new Git repository
 ```
 git init .

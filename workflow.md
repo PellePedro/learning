@@ -54,7 +54,7 @@ EOF
 ```
 
 # Create a Makefile
-```
+```MAkefile
 DOCKER_IMAGE=dei.mcse.vmware.com/oga-controller:0.0.1
 
 module_name := $$(head -n 1 go.mod | awk '{print $$2 }')

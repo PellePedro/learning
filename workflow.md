@@ -26,6 +26,16 @@ go mod init ${MODULE}
 ## Add Common Dependencies
 ```
 go get github.com/sirupsen/logrus
+```
+
+## Add Kubernetes API Dependencies
+[Client Go](https://pkg.go.dev/k8s.io/client-go)<BR/>
+[k8s API](https://pkg.go.dev/k8s.io/api)<BR/>
+[k8s API Machinery](https://pkg.go.dev/k8s.io/apimachinery)<BR/>
+```
+go get k8s.io/api@latest
+go get k8s.io/client-go@latest
+go get k8s.io/apimachinery@latest
 
 ```
 

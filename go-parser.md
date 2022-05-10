@@ -1,13 +1,13 @@
 
 [Text Templaytes](https://github.com/RangelReale/gotexttemplate/tree/master/util/goconv/cmd/goconv)
 
-[mobile](https://github.com/guyezi/mobile/blob/3c8601c510d0503ac84d1e5cb8e24de550201dea/cmd/gobind/main.go#L69)
-[Mobile Internal] (https://github.com/guyezi/mobile/blob/3c8601c510d0503ac84d1e5cb8e24de550201dea/internal/importers/ast.go)
-[GBB](https://github.com/voidint/gbb/tree/master)
+[mobile](https://github.com/guyezi/mobile/blob/3c8601c510d0503ac84d1e5cb8e24de550201dea/cmd/gobind/main.go#L69)<br/>
+[Mobile Internal] (https://github.com/guyezi/mobile/blob/3c8601c510d0503ac84d1e5cb8e24de550201dea/internal/importers/ast.go)<br/>
+[GBB](https://github.com/voidint/gbb/tree/master)<br/>
 [Dispel](https://github.com/vincent-petithory/dispel)
 
 <details>
-  <summary>Go Workspaces</summary>
+  <summary>P1</summary>
 ```go
 	testDeps := flag.Bool("t", false, "Include test dependencies")
 	std := flag.Bool("std", false, "Include standard library dependencies")
@@ -60,10 +60,8 @@
 	for _, dep := range deps {
 		fmt.Println(dep)
 	}
-  
-  
 ```
-<details/>
+</details>
 
 
 

@@ -1,6 +1,7 @@
-# Development from Beginning to Production
+# Development Workflow in golang
+This workflow describes setting up a new golang application with k8s ci/cd, then develop and deploy the service in k8s and use the go debugger dlv to set breakpoints and debug the deployment in kubernetes.
 
-## Table of Contents
+## Actions
 - Setting up CI/CD with k8s cluster
 - Setting up git for Project
 - Setting up go module for project

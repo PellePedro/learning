@@ -8,7 +8,8 @@
 
 <details>
   <summary>P1</summary>
-```go
+        ```
+	
 	testDeps := flag.Bool("t", false, "Include test dependencies")
 	std := flag.Bool("std", false, "Include standard library dependencies")
 	cfg := &packages.Config{
@@ -60,9 +61,8 @@
 	for _, dep := range deps {
 		fmt.Println(dep)
 	}
-```
+      ```
 </details>
-
 
 
 ```

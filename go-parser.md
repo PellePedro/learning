@@ -4,12 +4,14 @@
 [mobile](https://github.com/guyezi/mobile/blob/3c8601c510d0503ac84d1e5cb8e24de550201dea/cmd/gobind/main.go#L69)<br/>
 [Mobile Internal] (https://github.com/guyezi/mobile/blob/3c8601c510d0503ac84d1e5cb8e24de550201dea/internal/importers/ast.go)<br/>
 [GBB](https://github.com/voidint/gbb/tree/master)<br/>
-[Dispel](https://github.com/vincent-petithory/dispel)
+[Dispel](https://github.com/vincent-petithory/dispel)<br/>
+[Code See](https://github.com/Codesee-io/codesee-deps-go)
 
 <details>
   <summary>P1</summary>
   ```
-     testDeps := flag.Bool("t", false, "Include test dependencies")
+	
+  testDeps := flag.Bool("t", false, "Include test dependencies")
 	std := flag.Bool("std", false, "Include standard library dependencies")
 	cfg := &packages.Config{
 		Mode:  packages.NeedName | packages.NeedImports | packages.NeedDeps,
@@ -22,7 +24,6 @@
 	if packages.PrintErrors(pkgs) > 0 {
 		os.Exit(1)
 	}
-
 	depSet := make(map[string]struct{})
 	pre := func(pkg *packages.Package) bool {
 		depSet[pkg.PkgPath] = struct{}{}
@@ -38,7 +39,6 @@
 		if packages.PrintErrors(pkgs) > 0 {
 			os.Exit(1)
 		}
-
 		stdSet := make(map[string]struct{})
 		pre := func(pkg *packages.Package) bool {
 			stdSet[pkg.PkgPath] = struct{}{}
@@ -62,7 +62,6 @@
 	}
   ```
 </details>
-
 
 ```
 func ExtractSymbols(f *ast.File) []string {

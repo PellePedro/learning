@@ -6,8 +6,9 @@
 [GBB](https://github.com/voidint/gbb/tree/master)
 [Dispel](https://github.com/vincent-petithory/dispel)
 
-
-```
+<details>
+  <summary>Go Workspaces</summary>
+```go
 	testDeps := flag.Bool("t", false, "Include test dependencies")
 	std := flag.Bool("std", false, "Include standard library dependencies")
 	cfg := &packages.Config{
@@ -62,7 +63,7 @@
   
   
 ```
-
+<details/>
 
 
 

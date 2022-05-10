@@ -9,8 +9,8 @@
 
 <details>
   <summary>P1</summary>
-  ```
 	
+  ```
   testDeps := flag.Bool("t", false, "Include test dependencies")
 	std := flag.Bool("std", false, "Include standard library dependencies")
 	cfg := &packages.Config{
@@ -61,9 +61,15 @@
 		fmt.Println(dep)
 	}
   ```
+	
 </details>
 
-```
+
+<details>
+  <summary>P1</summary>
+
+  ```
+	
 func ExtractSymbols(f *ast.File) []string {
 	symbols := []string{}
 	for _, decl := range f.Decls {
@@ -91,7 +97,6 @@ func ExtractSymbols(f *ast.File) []string {
 	}
 	return symbols
 }
-
 var _ = It("ensures complete coverage of the core dsl", func() {
 	fset := token.NewFileSet()
 	pkgs, err := parser.ParseDir(fset, "../", nil, 0)
@@ -103,7 +108,6 @@ var _ = It("ensures complete coverage of the core dsl", func() {
 		}
 		expectedSymbols = append(expectedSymbols, ExtractSymbols(file)...)
 	}
-
 	actualSymbols := []string{}
 	for _, pkg := range []string{"core", "reporting", "decorators", "table"} {
 		pkgs, err := parser.ParseDir(fset, "./"+pkg, nil, 0)
@@ -112,17 +116,19 @@ var _ = It("ensures complete coverage of the core dsl", func() {
 			actualSymbols = append(actualSymbols, ExtractSymbols(file)...)
 		}
 	}
-
 	Ω(actualSymbols).Should(ConsistOf(expectedSymbols))
 })
-
 ```
-
-
+</details>
+	
+	
 [Code See](https://github.com/Codesee-io/codesee-deps-go)
-```
-package parser
 
+<details>
+  <summary>Code See</summary>
+	
+  ```
+package parser
 import (
 	"io/ioutil"
 	"os"
@@ -131,7 +137,6 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/mod/modfile"
 )
-
 // recursiveModulePath takes in the root of the project and a directory within
 // that root, and it will search all directories starting with dir and ending
 // with root to find a go.mod file. It returns the module path (which is
@@ -143,7 +148,6 @@ func recursiveModulePath(root, dir string) (string, string, error) {
 	if err != nil && !os.IsNotExist(err) {
 		return "", "", errors.WithStack(err)
 	}
-
 	if err == nil {
 		// A go.mod file exists in this directory.
 		mod, err := ioutil.ReadFile(modFilePath)
@@ -152,7 +156,6 @@ func recursiveModulePath(root, dir string) (string, string, error) {
 		}
 		return modfile.ModulePath(mod), dir, nil
 	}
-
 	if dir == root {
 		// This means that we didn't find a go.mod file anywhere in the
 		// directory tree, so this project might not be using Go modules.
@@ -161,18 +164,17 @@ func recursiveModulePath(root, dir string) (string, string, error) {
 		// does work (e.g. with the golang/go repo).
 		return "", "", nil
 	}
-
 	// If we didn't find a go.mod in this directory, and we're not at the root
 	// yet, go up one directory and look for a go.mod file there.
 	return recursiveModulePath(root, filepath.Dir(dir))
 }
-
+```
+</details>
 
 
 
 
 package parser
-
 import (
 	"go/ast"
 	"go/parser"

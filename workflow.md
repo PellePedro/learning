@@ -1,22 +1,95 @@
 # Development Workflow in golang
-This workflow describes setting up a new golang application with k8s ci/cd, then develop and deploy the service in k8s and use the go debugger dlv to set breakpoints and debug the deployment in kubernetes.
+This guide describes setting up a new golang project with k8s ci/cd, command line debuging with [dlv debugger](https://github.com/go-delve/delve) and multistage container build file. The projects are managed by make.
 
-## Actions
-- Setting up CI/CD with k8s cluster
+## Prerequisit on local machine
+- golang 1.18
+- docker
+- kind
+- kubectl
+```
+# For MAC install [homebrew](https://brew.sh)
+brew install go
+brew install kind
+brew install kubectl
+```
+
+## Action Plan (project from scratch)
 - Setting up git for Project
+- Setting up CI/CD with kind k8s cluster
 - Setting up go module for project
 - Setting up Makefile
-- Setting up Multi Stage Docker build file
+- Setting up Multi Stage Docker build file (debug/release)
 - Implementing a sample application in go accessing the Kubernetes API
 - Creating deployment descritors and using kuztomize
-- Compiling Application with debugging information
+- Compiling Application for debugging/release
 - Deploying the application to local k8s cluster
-- Attaching code level debugger (dlv) for debugging  
+- Attaching code level debugger (dlv) and demonstrate debugging  
 
-# Create new Git repository
+## Create new Git repository
 ```
 git init .
 ```
+## Setting up CI/CD with kind k8s cluster
+```
+mkdir -p scripts/start-cluster.sh
+```
+### Edit file scripts/start-cluster.sh and paste following content
+```
+#!/bin/sh
+set -o errexit
+
+# create registry container unless it already exists
+reg_name='kind-registry'
+reg_port='5001'
+if [ "$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)" != 'true' ]; then
+  docker run \
+    -d --restart=always -p "127.0.0.1:${reg_port}:5000" --name "${reg_name}" \
+    registry:2
+fi
+
+# create a cluster with the local registry enabled in containerd
+cat <<EOF | kind create cluster --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  podSubnet: 10.10.0.0/16
+nodes:  
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+containerdConfigPatches:
+- |-
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
+    endpoint = ["http://${reg_name}:5000"]
+EOF
+kubectl wait --for=condition=ready pods --namespace=kube-system -l k8s-app=kube-dns
+
+
+# connect the registry to the cluster network if not already connected
+if [ "$(docker inspect -f='{{json .NetworkSettings.Networks.kind}}' "${reg_name}")" = 'null' ]; then
+  docker network connect "kind" "${reg_name}"
+fi
+
+# Document the local registry
+# https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-registry-hosting
+  namespace: kube-public
+data:
+  localRegistryHosting.v1: |
+    host: "localhost:${reg_port}"
+    help: "https://kind.sigs.k8s.io/docs/user/local-registry/"
+EOF
+```
+
+```
+chmod +x scripts/start-cluster.sh
+```
+
 
 # Developing a K8S Controller in GO
 

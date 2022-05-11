@@ -120,6 +120,36 @@ build-image: ## Build Container Image
 
 
 ## Create multi-stage docker build file (Dockerfile)
+```
+# syntax=docker/dockerfile:1.3-labs
+FROM golang:1.18.1-alpine as base
+COPY --from=qmcgaw/binpot:golangci-lint /bin /usr/local/bin/golangci-lint
+COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
+RUN apk add build-base git bash curl
+
+ARG MODULE_NAME
+WORKDIR /go/src/${MODULE_NAME}
+
+ADD .golangci.yaml .
+
+COPY  .golangci.yaml .
+COPY  Makefile .
+COPY  go.* .
+COPY  cmd cmd
+COPY  pkg pkg
+
+RUN go mod download
+RUN go fmt ./...
+#RUN go vet ./...
+RUN golangci-lint run ./...
+RUN CGO_ENABLED=0 go build -gcflags="all=-N -l" -o /usr/local/bin/app ./cmd
+
+CMD ["/usr/local/bin/app"]
+```
+
+
+
+
 
 ### Awesome Multistage Build Files
 [Concurrent Mining](https://github.com/ahmetson/concurrent-mining)<BR/>

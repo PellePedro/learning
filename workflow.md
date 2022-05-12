@@ -70,8 +70,10 @@ This attached dlv to the service and anters a debug mode.<br/>
 ```
 # set breakpoint
 b client.ListPods
+
 # list code
 l client.ListPods
+
 # resume execution
 c
 ```
@@ -83,14 +85,8 @@ kubectl exec -it my-pod /debug.sh
 alt.
 make send-curl
 ```
-Once breakpoint is hit issue dlv command
-```
-n 	# step nexyt instruction
-p var	# print vars
-l 	# list code
 
-```
-
+[dlv commands](https://github.com/go-delve/delve/tree/master/Documentation/cli#display)
 
 
 

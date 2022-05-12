@@ -1,4 +1,4 @@
-# Development Workflow in golang
+# Skaffolding develoment in golang
 This guide describes setting up a new golang project with k8s ci/cd, command line debuging with [dlv debugger](https://github.com/go-delve/delve) and multistage container build file. The projects are managed by make.
 
 ## Prerequisit on local machine
@@ -7,7 +7,7 @@ This guide describes setting up a new golang project with k8s ci/cd, command lin
 - kind
 - kubectl
 ```
-# For MAC install [homebrew](https://brew.sh)
+# For MAC, the prereq is installed with kind [homebrew](https://brew.sh)
 brew install go
 brew install kind
 brew install kubectl
@@ -15,7 +15,7 @@ brew install kubectl
 
 ## Action Plan (project from scratch)
 - Setting up git for Project
-- Setting up CI/CD with kind k8s cluster
+- Setting up CI/CD with kind k8s cluster and local registry
 - Setting up go module for project
 - Setting up Makefile
 - Setting up Multi Stage Docker build file (debug/release)
@@ -33,7 +33,8 @@ git init .
 ```
 mkdir -p scripts/start-cluster.sh
 ```
-### Edit file scripts/start-cluster.sh and paste following content
+### Create kind startup script
+Edit file scripts/start-cluster.sh and paste following
 ```
 #!/bin/sh
 set -o errexit
@@ -90,8 +91,23 @@ EOF
 chmod +x scripts/start-cluster.sh
 ```
 
+### Create cluster destroy script
+Edit file scripts/destroy-cluster.sh and paste following
+```
+#!/bin/sh
+set -o errexit
 
-# Developing a K8S Controller in GO
+if [[ -z ${CI_PIPELINE_ID+x} ]]; then
+  CI_PIPELINE_ID=ci-cluster
+fi
+
+kind delete cluster --name $CI_PIPELINE_ID
+```
+```
+chmod +x scripts/destroy-cluster.sh
+```
+
+# Developing a sample K8S pod that list pods in a namespace
 
 ## Create new go module for component
 
@@ -100,23 +116,103 @@ export MODULE=distributed.edge.vmware.com/oga-controller
 go mod init ${MODULE}
 ```
 
-## Add Common Dependencies
+## Add Sample Code
+
+create file cmd/main.go and paste the following
+```golang
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"net/http"
+	"oga/controller/pkg/kube/client"
+)
+
+const (
+	listeningPort = "8090"
+)
+
+func listPods(w http.ResponseWriter, req *http.Request) {
+	err := req.ParseForm() // Parses the request body
+	if err != nil {
+		fmt.Println("Failed to parse post")
+		w.WriteHeader(http.StatusInternalServerError)
+		if _, err := w.Write([]byte("Failed to read namespace parameters from request")); err != nil {
+			// make linter happy
+		}
+		return
+	}
+	namespace := req.Form.Get("ns")
+	clientInfo := client.ListPods(namespace)
+
+	var b bytes.Buffer
+	b.WriteString(fmt.Sprintf("List of Pod Name and IP in namespace %s\n", namespace))
+	for k, v := range clientInfo {
+		b.WriteString(fmt.Sprintf("%s %s\n", k, v))
+	}
+
+	if _, err := w.Write(b.Bytes()); err != nil {
+		fmt.Println("Error writing response")
+	}
+}
+
+func main() {
+	http.HandleFunc("/list-pods", listPods)
+	fmt.Printf("Server started on port [%s]", listeningPort)
+	err := http.ListenAndServe(fmt.Sprintf(":%s", listeningPort), nil)
+	if err != nil {
+		fmt.Printf("Failed to Listen %v\n", err)
+	}
+}
+
 ```
-go get github.com/sirupsen/logrus
+create file pkg/kube/client/client.go and paste the following
+```golang
+package client
+
+import (
+	"context"
+	"fmt"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
+)
+
+var (
+	clientset *kubernetes.Clientset
+)
+
+func init() {
+	config, err := rest.InClusterConfig()
+	if err != nil {
+		panic(err.Error())
+	}
+	clientset, err = kubernetes.NewForConfig(config)
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+// ListPods returns a map of pod Names and podIP for a given namespace
+func ListPods(namespace string) map[string]string {
+	m := make(map[string]string)
+	pods, err := clientset.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		fmt.Println("Failed to list Pods")
+		return m
+	}
+	for _, pod := range pods.Items {
+		podIP := pod.Status.PodIP
+		podName := pod.ObjectMeta.Name
+		fmt.Printf("Found pod with name [%s] host IP[%s]", podName, podIP)
+		m[podName] = podIP
+	}
+	return m
+}
 ```
 
-## Add Kubernetes API Dependencies
-There are three go dependencies required to interact with the API Server.
-
-[Client Go](https://pkg.go.dev/k8s.io/client-go)<BR/>
-[k8s API](https://pkg.go.dev/k8s.io/api)<BR/>
-[k8s API Machinery](https://pkg.go.dev/k8s.io/apimachinery)<BR/>
-```
-go get k8s.io/api@latest
-go get k8s.io/client-go@latest
-go get k8s.io/apimachinery@latest
-
-```
 
 # Add liniting rules for golangci
 ```yaml
@@ -147,10 +243,21 @@ EOF
 
 # Create a Makefile
 ```Makefile
-DOCKER_IMAGE=dei.mcse.vmware.com/oga-controller:0.0.1
+REPOSITORY=localhost:5000
+IMAGE=sample-k8s-client
+TAG=0.0.1
+DOCKER_IMAGE=sample-goclient:latest
+APPNAME=my-service
+POD_NAME=my-controller
 
+DOCKER_IMAGE = ${REPOSITORY}/${IMAGE}-debug:$(TAG)
+RELEASE_IMAGE = ${REPOSITORY}/${IMAGE}:$(TAG)
+
+
+# find module name from go.mod to adjust gopath
 module_name := $$(head -n 1 go.mod | awk '{print $$2 }')
-build-arg+=--build-arg MODULE_NAME=$(module_name) 
+build-arg += --build-arg MODULE_NAME=$(module_name)
+
 
 .PHONY: help
 help: ## Display this help.
@@ -158,44 +265,72 @@ help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 
-# ----------------------------------------------------------------------------------
-# General build
-.PHONY: fmt
-fmt: ## Run go formatting
-	go fmt ./...
+.PHONY: clean-docker
+clean-docker: ## Clean dangeling docker images
+		docker rm devcontainer --force
+	  docker rm $$(docker ps -q -f 'status=exited')
+	  docker rmi $$(docker images -q -f "dangling=true")
 
-.PHONY: vet
-vet: ## Run go veting
-	go vet ./...
-
-.PHONY: lint
-lint: ## Run go linting
-	go golangci-lint rung ./...
-
-.PHONY: test
-test: ## Run go testing
-	go test -v ./...
-
-.PHONY: go-build
-go-build: main.go ## Compile for Release
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-w' -o main ./cmd/main.go
-
-.PHONY: debug-build
-debug-build: main.go ## Compile for Debug
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -gcflags="all=-N -l" -o main-debug ./cmd/main.go
-	
-# ============= Docker ===================
+# ============= Docker Commands for Container ===================
 .PHONY: build-image
 build-image: ## Build Container Image
-	@echo "Building image: $(DOCKER_IMAGE)."
-	@docker build --progress plain --force-rm $(build-arg) -t $(DOCKER_IMAGE) .
+	@echo "Building debug image: $(DOCKER_IMAGE)."
+	@DOCKER_BUILDKIT=1 docker build --progress plain --force-rm $(build-arg) --target=builder -t $(DOCKER_IMAGE) .
+	@echo "Building releast image: $(RELEASE_IMAGE)."
+	@DOCKER_BUILDKIT=1 docker build --progress plain --force-rm $(build-arg) --target=target -t $(RELEASE_IMAGE) .
+
+.PHONY: push-image
+push-image: ## Push Container Image
+	@docker push ${DOCKER_IMAGE}
+
+.PHONY: run-docker
+run:  ## Run container in docker
+	@echo "Run: $(DOCKER_IMAGE)."
+	@docker run -it --rm --name devcontainer --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -p 8090:8090 $(DOCKER_IMAGE)
+
+.PHONY: exec
+exec: ## exec to container started by Docker
+	@echo "Attachinig to: $(DOCKER_IMAGE)."
+	@docker exec -it devcontainer bash
+
+# ============= K8S Commands ===================
+
+.PHONY: create-cluster
+create-cluster: ## Create Kind Cluster
+	@./scripts/start-cluster.sh
+
+.PHONY: destroy-cluster
+destroy-cluster: ## Destroy Kind Cluster
+	@./scripts/destroy-cluster.sh
+
+.PHONY: load-image
+load-image: ## Load Docker image in Kind
+	@kind load docker-image $(DOCKER_IMAGE)
+
+.PHONY: deploy
+deploy: ## Deploy pod to kinf
+	@kubectl create -f deployments/rbac.yaml
+	@kubectl create -f deployments/pod.yaml
+
+.PHONY: undeploy
+undeploy: ## Undeploy pod
+	@kubectl delete -f deployments
+
+.PHONY: debug-pod
+debug-pod: ## Debug pod in kind with dlv
+	@kubectl exec -it my-pod dlv attach 1
+
+.PHONY: send-curl
+send-curl: ## Send Curl command to pod
+	@kubectl exec -it  my-pod /debug.sh
+
 ```
 
 
-## Create multi-stage docker build file (Dockerfile)
-```
+## Create multi-stage Dockerfile
+```Dockerfile
 # syntax=docker/dockerfile:1.3-labs
-FROM golang:1.18.1-alpine as base
+FROM golang:1.18.1-alpine as builder
 COPY --from=qmcgaw/binpot:golangci-lint /bin /usr/local/bin/golangci-lint
 COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
 RUN apk add build-base git bash curl
@@ -216,201 +351,82 @@ RUN go fmt ./...
 #RUN go vet ./...
 RUN golangci-lint run ./...
 RUN CGO_ENABLED=0 go build -gcflags="all=-N -l" -o /usr/local/bin/app ./cmd
+RUN CGO_ENABLED=0 go build -ldflags="-extldflags=-static" -o /release/app ./cmd
 
+COPY <<-EOF /debug.sh
+#!/bin/bash
+curl -d \"ns=kube-system\" -X POST http://localhost:8090/list-pods
+EOF
+RUN chmod +x /debug.sh
+
+CMD ["/usr/local/bin/app"]
+
+FROM scratch as target
+COPY --from=builder /release/app /usr/local/bin/app
 CMD ["/usr/local/bin/app"]
 ```
 
+## Create gitlab cicd
+Create file .gitlab-ci.yml
+```yaml
+stages:          # List of stages for jobs, and their order of execution
+  - start-cluster
+  - build-deploy
 
+deploy cluster:       # This job runs in the build stage, which runs first.
+  stage: start-cluster
+  script:
+    - ./scripts/start-cluster.sh
+    - kubectl get nodes --insecure-skip-tls-verify=true
+  after_script:
+    - ./scripts/destroy-cluster.sh
 
-
-
-### Awesome Multistage Build Files
-[Concurrent Mining](https://github.com/ahmetson/concurrent-mining)<BR/>
-
-### Links
-[VS Code Go Debug](https://github.com/mipnw/vscode-go-debug/blob/main/Dockerfile)<BR/>
-```
-# demonstrate "dlv debug", including build tags
-FROM golang:1.15.8-alpine AS dev
-RUN apk add --no-cache --update git
-RUN git clone https://github.com/go-delve/delve && cd delve && go install github.com/go-delve/delve/cmd/dlv
-WORKDIR /go/src/app
-COPY main.go .
-CMD [ "dlv", "--listen=:2345", "--headless", "--api-version=2", "--log", "--build-flags=-tags=mytag", "debug", "main.go", "--", "-multiplier", "2" ]
-
-# demonstrate "dlv exec"
-FROM dev as build
-RUN CGO_ENABLED=0 go build -gcflags="-N -l" -tags mytag -o /usr/local/bin/experiment2 main.go
-CMD [ "dlv", "--listen=:2345", "--headless", "--api-version=2", "--log", "exec", "/usr/local/bin/experiment2", "--", "-multiplier", "2" ]
-
-# demonstrate "dlv exec" from an image without any source code
-# in VSCode your launch configuration must use /go/src/app (see WORKDIR in dev stage) as "substitutePath.to" or "remotePath"
-FROM alpine AS deploy
-COPY --from=build /go/bin/dlv /usr/local/bin/dlv
-COPY --from=build /usr/local/bin/experiment2 /usr/local/bin/experiment2
+build-deploy-pod:   # This job runs in the test stage.
+  stage: build-deploy
+  script:
+    - make build-image
+    - make push-image
+    - echo "Deploying application..."
+    - make deploy
+    - kubectl get pods
 ```
 
+## Fetch golang dependencies
 ```
-FROM golang:1.18.1-alpine as buildbase
-
-RUN apk update \
-  && apk add git \
-  && apk add gcc \
-  && apk add libc-dev \
-  && go install github.com/go-delve/delve/cmd/dlv@latest
-
-ARG MODULE_NAME
-
-WORKDIR ${MODULE_NAME}
-COPY . ${MODULE_NAME}
-
-RUN go mod download
-RUN go build -gcflags="all=-N -l" -o /release/server ./cmd
-
+go mod tidy
 ```
 
+## Build image
 ```
-FROM golang:1.18.1-alpine as buildbase
-COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
-WORKDIR ${MODULE_NAME}
-COPY go.mod ${MODULE_NAME}
-COPY go.sum ${MODULE_NAME}
-COPY cmd ${MODULE_NAME}/cmd
-COPY pkg ${MODULE_NAME}/pkg
-
-RUN go mod download
-# Build with debug info
-RUN go build -gcflags="all=-N -l" -o /usr/local/bin/server ./cmd
-
-CMD [/usr/local/bin/server]
+make build-image
+```
+## Start kind cluster
+```
+make create-cluster
+```
+## Push Inage to local docker registry
+```
+make push-image
 ```
 
-[](https://github.com/banjintaohua/docker/tree/master/Go/build)
-```Dockerfile
-# syntax=docker/dockerfile:1.4
-FROM golang:${GO_VERSION:-1.18.1-alpine} as stage1
-COPY --from=qmcgaw/binpot:dlv /bin /usr/local/bin/dlv
-COPY --from=golangci/golangci-lint:v1.45.0-alpine /usr/bin/golangci-lint /usr/bin/golangci-lint
-
-WORKDIR /build
-ADD go.mod .
-ADD go.sum .
-ADD cmd ./cmd
-ADD pkg ./pkg
-ADD .golangci.yml .
-
-RUN go mod download
-
-golangci-lint run --timeout 10m0s ./...
-
-
-RUN <<EOF
-go build -gcflags="all=-N -l" -o /release/server
-cp entrypoint.sh /release/entrypoint.sh
-chmod +x /release/entrypoint.sh
-EOF
-
-# Stage 3: run server with dlv
-FROM golang:${GO_VERSION:-1.17.3-alpine} as runner
-
-WORKDIR /
-COPY --from=builder /release /release
-
-# Health check by curl
-RUN apk update \
-  && apk add curl tzdata \
-  && rm -rf /tmp/* /var/cache/apk/*
-
-EXPOSE 2345 8080
-
-# CMD ["/release/dlv", "--listen=:2345", "--headless=true", "--check-go-version=false", "--api-version=2", "--accept-multiclient", "exec", "/release/server"]
-ENTRYPOINT ["/release/entrypoint.sh"]
-
+## Deploy Pod to local kind cluster
 ```
-entrypoint.sh
-```bash
-#!/usr/bin/env sh
+make deploy
+```
 
-set -e
-health_check() {
-  if [ "$(curl -f http://localhost:8080)" -ne 0 ]; then
-    echo "Application startup failed. Exiting."
-    exit 1
-  fi
-  echo "Application startup successful."
-  return 0
-}
+## Ensure that pod is running
+```
+kubectl get pods
+```
 
-case "$1" in
-"dev")
-  dlv --listen=:2345 --headless=true --check-go-version=false --api-version=2 --accept-multiclient exec /release/server || health_check
-  ;;
-"run")
-  /release/server || health_check
-  ;;
-"health")
-  health_check
-  ;;
-*)
-  exec "$@"
-  ;;
-esac
+## Start Debugging session
+```
+make debug-pod
+```
 
+## Start Debugging session
+```
+make send-curl
 ```
 
 
-
-
-
-
-## Sample Http server
-
-Add file cmd/main.go
-```
-package main
-
-import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"time"
-
-	"github.com/gorilla/mux"
-)
-
-const (
-	readTimeout  = 5
-	writeTimeout = 10
-	idleTimeout  = 120
-)
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/plain")
-	returnStatus := http.StatusOK
-	w.WriteHeader(returnStatus)
-	message := fmt.Sprintf("Hello %s!", r.UserAgent())
-	w.Write([]byte(message))
-}
-
-func main() {
-	serverAddress := ":8080"
-	l := log.New(os.Stdout, "sample-srv ", log.LstdFlags|log.Lshortfile)
-	m := mux.NewRouter()
-
-	m.HandleFunc("/", indexHandler)
-
-	srv := &http.Server{
-		Addr:         serverAddress,
-		ReadTimeout:  readTimeout * time.Second,
-		WriteTimeout: writeTimeout * time.Second,
-		IdleTimeout:  idleTimeout * time.Second,
-		Handler:      m,
-	}
-
-	l.Println("server started")
-	if err := srv.ListenAndServe(); err != nil {
-		panic(err)
-	}
-}
-```

@@ -1,0 +1,21 @@
+stages:          # List of stages for jobs, and their order of execution
+  - start-cluster
+  - build-deploy
+
+deploy cluster:       # This job runs in the build stage, which runs first.
+  stage: start-cluster
+  script:
+    - ./scripts/start-cluster.sh
+    - kubectl get nodes --insecure-skip-tls-verify=true
+  after_script:
+    - ./scripts/destroy-cluster.sh
+
+build-deploy-pod:   # This job runs in the test stage.
+  stage: build-deploy
+  script:
+    - make build-image
+    - make push-image
+    - echo "Deploying application..."
+    - make deploy
+    - kubectl get pods
+

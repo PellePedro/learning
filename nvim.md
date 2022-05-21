@@ -1,3 +1,6 @@
+# Awesome Configs
+[Keymappings](https://github.com/Lazytangent/nvim-conf)
+
 # Keymappings
 <details>
   <summary>Keymappings</summary>

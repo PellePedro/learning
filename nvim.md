@@ -1,6 +1,6 @@
 # Keymappings
 <details>
-  <summary>Spectre</summary>
+  <summary>Keymappings</summary>
     
   ```
   \2    Telescope Buffers
@@ -18,6 +18,16 @@
   
 
 # Plugins
+  
+```
+use { "nvim-telescope/telescope-file-browser.nvim" }
+use "tom-anders/telescope-vim-bookmarks.nvim"
+use {'nvim-telescope/telescope-ui-select.nvim' }
+use {'theHamsta/nvim-dap-virtual-text'}
+use { "ghillb/cybu.nvim" }
+use { "nyngwang/NeoZoom.lua", branch = "neo-zoom-original" }
+ 
+```
 <details>
   <summary>Spectre</summary>
     

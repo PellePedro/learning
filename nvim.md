@@ -1,5 +1,8 @@
 # Awesome Configs
 [Keymappings](https://github.com/Lazytangent/nvim-conf)
+<BR/>
+
+[Plugins & golangci](https://github.com/fablol/.cfg/tree/master/.config/nvim)
 
 # Keymappings
 <details>

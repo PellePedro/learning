@@ -1,4 +1,36 @@
+# Awesome Configs
+[Keymappings](https://github.com/Lazytangent/nvim-conf)
+
+# Keymappings
+<details>
+  <summary>Keymappings</summary>
+    
+  ```
+  \2    Telescope Buffers
+  \t    Trouble
+  \w    Telescope search <cword>
+  \s    Telescope search word
+  \3    LazyGit
+  \4    ndap-ui    
+  \5    dap
+  \6.   dap debug
+  R     Replace
+    
+  ```
+</details>
+  
+
 # Plugins
+  
+```
+use { "nvim-telescope/telescope-file-browser.nvim" }
+use "tom-anders/telescope-vim-bookmarks.nvim"
+use {'nvim-telescope/telescope-ui-select.nvim' }
+use {'theHamsta/nvim-dap-virtual-text'}
+use { "ghillb/cybu.nvim" }
+use { "nyngwang/NeoZoom.lua", branch = "neo-zoom-original" }
+ 
+```
 <details>
   <summary>Spectre</summary>
     

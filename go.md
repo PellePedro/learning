@@ -25,6 +25,7 @@
 <details>
   <summary>Go Plugin</summary>
   [Doc](https://pkg.go.dev/plugin) <br/>
+  [Guide])https://www.sobyte.net/post/2022-03/golang-plugin/)
   package main
   import "fmt"
   var V int

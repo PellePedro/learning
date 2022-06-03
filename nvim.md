@@ -21,7 +21,10 @@
     
   ```
 </details>
-  
+
+# Feature
+  - Folding
+  - Telescope (projects, buffers, filemanager, files, bookmarks, grep, grep <cword>)
 
 # Plugins
   

@@ -22,6 +22,20 @@
   ```
 </details>
 
+<details>
+  <summary>Built in Keymappings</summary>
+    
+  ```
+  tabe  Open New tab
+  tabn  Go to next tab
+  tabp  Go to previous tab
+  tabm  Move tab
+  tabc  Close tab
+  gt    Goto next tab
+  gp    Goto previous tab    
+  ```
+</details>  
+  
 # Feature
   - Folding
   - Telescope (projects, buffers, filemanager, files, bookmarks, grep, grep <cword>)

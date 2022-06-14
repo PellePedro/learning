@@ -25,6 +25,8 @@
   <summary>go.nvim Keymappings</summary>
     
   ```  
+  :ReplToggle
+  :GoBreakToggle
   :GoDebug [OPTIONS]
     -c, --compile         compile and run\n"
     -r, --run             run\n"

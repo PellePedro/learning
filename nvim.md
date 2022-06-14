@@ -16,43 +16,40 @@
   \w    Telescope search <cword>
   \s    Telescope search word
   \3    LazyGit
-  \4    ndap-ui    
-  \5    dap
-  \6.   dap debug
   R     Replace
     
   ```
 </details>
 
 <details>
-  <summary>DAP Keymappings</summary>
+  <summary>go.nvim Keymappings</summary>
     
   ```  
-  vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
-  vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
-  vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>")
-  vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>")
-  vim.keymap.set("n", "<Leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
-  vim.keymap.set("n", "<Leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
-  vim.keymap.set("n", "<Leader>lp", ":lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
-  vim.keymap.set("n", "<Leader>dr", ":lua require'dap'.repl.open()<CR>")
-  vim.keymap.set("n", "<Leader>dl", ":lua require'dap'.run_last()<CR>")
-  vim.keymap.set("n", "<Leader>td", ":lua require('dap-go').debug_test()<CR>")
-
-require('dap-go').setup()
-require("dapui").setup()
-require('nvim-dap-virtual-text').setup()
-
-local dap, dapui = require("dap"), require("dapui")
-dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
+  :GoDebug [OPTIONS]
+    -c, --compile         compile and run\n"
+    -r, --run             run\n"
+    -t, --test            run tests\n"
+    -R, --restart         restart\n"
+    -s, --stop            stop\n"
+    -h, --help            display this help and exit\n"
+    -n, --nearest         debug nearest file\n"
+    -p, --package         debug package\n"
+    -f, --file            display file\n"
+    -b, --breakpoint      set breakpoint\n"
+    -T, --tag             set tag"
+  
+  DAP
+    r = run
+    c = continue
+    n = step_over
+    s = step_into
+    o = step_out
+    S = stop
+    u = up
+    D = down
+    C = run_to_cursor
+    b = toggle_breakpoint
+    P = pause
 ```  
 </details>
   

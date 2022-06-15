@@ -76,6 +76,17 @@
 # Plugins
   
 ```
+Buffer      Telescope
+Files       Telescope
+Marks       Builtin
+Go          go.nvim
+Rename      Spectre
+LSP         null-ls, lsp, lspinstall
+Folding     Builtin
+Terminal    Togglterm
+Comment
+Todo
+  
 use { "nvim-telescope/telescope-file-browser.nvim" }
 use "tom-anders/telescope-vim-bookmarks.nvim"
 use {'nvim-telescope/telescope-ui-select.nvim' }
@@ -97,18 +108,9 @@ use { "nyngwang/NeoZoom.lua", branch = "neo-zoom-original" }
   ```
 </details>
 <details>
-  <summary>Indent Blankline</summary>
+  <summary>Keymapping</summary>
     
   ```
   ```
 </details>
-<details>
-  <summary>DAP Debugging</summary>
-    
-  ```
-  <F6>    Debug Test
-  <F5>    Continue
-  <F10>   Step Over
-  <F11>   Step Into
-  ```
-</details>
+

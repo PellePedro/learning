@@ -21,6 +21,20 @@
   ```
 </details>
 
+# Plugins
+<details>
+  <summary>Plugins</summary>
+    
+  ```
+  Better Quick Fix (bqf)
+  go.nvim
+  Spectre
+  Telescope (file, buffer, projects)
+    
+  ```
+</details>
+  
+
 <details>
   <summary>go.nvim Keymappings</summary>
     

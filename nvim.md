@@ -128,3 +128,36 @@ use { "nyngwang/NeoZoom.lua", branch = "neo-zoom-original" }
   ```
 </details>
 
+  
+# Building
+<details>
+  <summary>MAC</summary>
+    
+  ```
+#!/bin/bash
+
+SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk
+INSTALL_PATH=$HOME/.local/apps/nvim
+
+rm -rf neovim
+rm -rf /usr/local/bin/nvim
+rm -rf /usr/local/share/nvim
+rm -rf /usr/local/lib/nvim
+
+if [ -d "$INSTALL_PATH" ]; then rm -rf ${INSTALL_PATH}; fi
+
+mkdir -p ${INSTALL_PATH}
+brew install ninja libtool automake cmake pkg-config gettext
+git clone https://github.com/neovim/neovim.git && cd neovim
+git tag -d nightly
+git tag nightly
+make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=$INSTALL_PATH SDKROOT=$SDKROOT MACOSX_DEPLOYMENT_TARGET=11.0
+make install
+cd ..
+rm -rf ~/neovim
+ln -s ${INSTALL_PATH}/bin/nvim /usr/local/bin/nvim
+ln -s ${INSTALL_PATH}/share/nvim /usr/local/share/nvim
+ln -s ${INSTALL_PATH}/lib/nvim /usr/local/lib/nvim
+  ```
+</details>
+

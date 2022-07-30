@@ -5,7 +5,7 @@
 #
 https://stackoverflow.com/questions/64196547/is-possible-to-reflect-an-struct-from-ast
 
-
+```
 // main.go
 package main
 
@@ -61,14 +61,12 @@ func main() {
         }
     }
 }
+```
 
 
-
-
+```
 A long time passed and I find a way:
 After you parsed a AST file and get the structs from package, you could use reflection to create a struct in runtime with the following:
-
-
 t := reflect.StructOf([]reflect.StructField{
     {
         Name: "A",
@@ -84,3 +82,4 @@ t := reflect.StructOf([]reflect.StructField{
 })
 
 d := reflect.New(t).Interface() // Here you recived a struct as interface. And that's it.
+```

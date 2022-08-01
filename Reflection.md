@@ -87,7 +87,9 @@ d := reflect.New(t).Interface() // Here you recived a struct as interface. And t
 
 # AST
 
-[code generator](https://github.com:melwyn95/code-generator.git)
+[code generator](https://github.com/melwyn95/code-generator.git)<br/>
+https://github.com/melwyn95/code-generator.git
+
 ```
 package ast_utils
 

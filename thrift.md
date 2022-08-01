@@ -1,5 +1,15 @@
 
 # Processor
+
+Implemented Code
+```
+handler := NewCalculatorHandler()
+processor := demo.NewCartServiceProcessor(handler)
+server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
+
+```
+
+Generated Code
 ```
 
 func NewCartServiceProcessor(handler CartService) *CartServiceProcessor {

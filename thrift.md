@@ -27,3 +27,34 @@ func (p *CartServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.
 }
 
 ```
+
+# GRPC
+```
+
+func (p *MockProto) BuildMockService(server *MockGrpcServer, endpoint *types.Endpoint) error {
+  ...
+  serviceDesc := p.fileDescriptor.FindService(fmt.Sprintf("%s.%s", p.ProtoPackageName, serviceName))
+	if len(methods) != 0 {
+		grpcServiceDesc.Methods = methods
+	}
+	if len(streams) != 0 {
+		grpcServiceDesc.Streams = streams
+	}
+  ...
+	log.Infof("Building service %s is done", serviceDesc.GetName())
+	server.Server.RegisterService(grpcServiceDesc, struct{}{})
+
+}
+```
+
+```
+type ServiceDesc struct {
+	ServiceName string
+	// The pointer to the service interface. Used to check whether the user
+	// provided implementation satisfies the interface requirements.
+	HandlerType interface{}
+	Methods     []MethodDesc
+	Streams     []StreamDesc
+	Metadata    interface{}
+}
+``

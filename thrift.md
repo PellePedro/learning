@@ -4,7 +4,7 @@
 Implemented Code
 ```
 handler := NewCartServiceHandler()
-processor := demo.NewCartServiceProcessor(handler)
+processor := generated.NewCartServiceProcessor(handler)
 server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 
 ```

@@ -3,7 +3,7 @@
 
 Implemented Code
 ```
-handler := NewCalculatorHandler()
+handler := NewCartServiceHandler()
 processor := demo.NewCartServiceProcessor(handler)
 server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 

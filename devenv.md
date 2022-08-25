@@ -1,12 +1,23 @@
-### Skyramp Design Environment
+### Design Environment with VScode
 
 This tutorial will show a technical previw of integrating skyramp into the service development workflow.
 
-We identify the requirements on a cloud native development environment as:
+We identify the requirements on a design environment for microservices as:
 
 - Mocking open API interfaces (rest/grps/thrift) with Skyramp MockWorker.
 - Development with all tools in docker containers provides cositent and immutable tooling with the dev organization. 
 - Development and debugging tools at runtime (breakpoints, single stepping)
+
+
+## Containerized Development Tools (devcontainers).
+This tutorial will explore recent trends in development tools, which is to support code development inside containers e.g:
+<BR/>[AmbassadorTelepresence](https://www.getambassador.io/products/telepresence/)
+<BR/>[Gitlab Codespaces](https://github.com/features/codespaces)
+
+The moitvation to support VSCode and devcontainers:
+- Only a container runtime (Docker) and a coding/debugging UI (VScode) is required to be installed on local machine. 
+- Standardized development environment where tools (e.g. nodejs, python, dotnet, go, java) are packaded in immutable container images.
+- Supports Development and Debugging on a production like environmane
 
 
 ## Host Requirements

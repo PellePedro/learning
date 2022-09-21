@@ -1,4 +1,6 @@
 # Awesome Configs
+https://github.com/herschel-ma/nvim-config
+
 [Allaman](https://github.com/Allaman/nvim)
 <BR/>
 [Keymappings](https://github.com/Lazytangent/nvim-conf)

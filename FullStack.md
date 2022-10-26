@@ -1,5 +1,6 @@
 # Slide 1
-## Full Stack Overview (backend)
+```
+## Full Stack Overview (frontend, backend, server side render, IOT, json)
 ## Deployment Archetecture (Servers, VM's, Containers, Function as a service "AWS lamda")
 ## Application Architecture (Monolith, Microservcies, Function as a service) 
 ## API (http, json, event driven)
@@ -7,6 +8,7 @@
 ## Development Environment ( classic, devcontainers)
 ## Devops (source control, teamwork, continious integration)
 ## Code example (node, python, golang)
+```
 # Slide 2
 
 # Slide 3

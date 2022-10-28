@@ -9,12 +9,27 @@
 ## Devops (source control, teamwork, continious integration)
 ## Code example (node, python, golang)
 ```
-# Slide 2
+# Module 1 Overview
+## Introduction to Backend Development
 
-# Slide 3
+# Module 2 Exploring API (REST/gRPC/JSON/SQL)
+- HTTP Request/Response model
+- REST and CRUD (Create, Read, Update and Delete)
+- Test with REST client/postman
 
-# Slide 4
+# Module 3 Introduction to Programming
+- Node
+- Python
+- HTLM
+- CSS
 
-# Slide 5
+# Module 4 Source Control and GIT
 
-# Slide 6
+# Module 5 Application Arvitecture
+- Virtual Machiness
+- Containers
+- Function as Service
+
+# Module 5 Contaieners
+
+# Module 6

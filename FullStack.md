@@ -9,6 +9,21 @@
 ## Devops (source control, teamwork, continious integration)
 ## Code example (node, python, golang)
 ```
+
+# Backend Developer
+## Program Learning Outcomes
+- Gain understanding the web technology (web servers, services, databases, Domain Name Service) 
+- API and protocol ()
+- Application Virtual Machines, Containers, Micro Services
+- Development Process (source control, Continous Integratoon, deployment)
+- Development Tools
+- AWS Cloud Services
+- Deploy a Sample Online Boutique 
+
+# Advanced NodeJS
+
+
+
 # Module 1 Overview
 ## Introduction a target use case (e.g. online boutique)
 ### Discuss Reuirements

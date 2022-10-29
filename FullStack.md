@@ -10,14 +10,49 @@
 ## Code example (node, python, golang)
 ```
 # Module 1 Overview
-## Introduction to Backend Development
+## Introduction a target use case (e.g. online boutique)
+### Discuss Reuirements
+- Authentication/login
+- View Products
+- Shopping Cart (add, get, empty)
+- Recommendations
+- Select Currenency (USD, CAD, GBP, ERO)
+- Checkout
+- Payment
+- Shipping (get quote, ship order)
+- Order Confirmation
 
-# Module 2 Exploring API (REST/gRPC/JSON/SQL)
-- HTTP Request/Response model
-- REST and CRUD (Create, Read, Update and Delete)
-- Test with REST client/postman
+### Assignment
+- Describe Workflow
+- End user interaction 
+- Data Stored
 
-# Module 3 Introduction to Programming
+# Module 2 : Conseptuel Web App Arcitecture
+- Frontend
+- Webserver ( real or virtual )
+- Database ( types of database )
+
+## Introduce API and tools to test API
+- HTTP/HTTPS (Request/Response model)
+- REST (Create, Read, Update and Delete) CRUD
+- SQL / S3
+- Postman
+
+### Assignment
+Postman API
+
+# Module 3 Introduction to Development tools
+- Virtual Environment
+- Container and docker
+- VSCode Code Editor
+- Terminal and Unix Command
+- Source Control
+
+### Assignment
+Postman API
+
+
+# Module 4 Introduction to Programming
 - Node
 - Python
 - HTLM

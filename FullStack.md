@@ -19,38 +19,51 @@ Learn how to run queries from a back-end database
 Apply web development principles to build functioning back-end code
 
 ## Program Learning Outcomes
-- Gain understanding of the web technology (servers, services, databases, Domain Names)  
-- Overview of API and protocol for communication (HTTP, REST, JSON, SQL)
-- WEB Application Architecture (scalability, resilience, distribution and micro servies) 
+- Gain understanding of web technology (servers, services, databases, Domain Names)  
+- Overview of API and protocol for communication (browser frontend, IoT, HTTP, REST, JSON, SQL)
+- Real World WEB Application Architecture (scalability, resilience, distribution and micro servies) (load balancers, queues, redundance)
 - Deployment platforms (virtual servers, containers, function as a service (AWS lamda))
-- Defining AWS as Deployment System.  
-- Development Workflow (source control, github, Continous Integration, automation)
+- Learn AWS as Deployment System.  
+- Devops and Development Workflow (source control, github, Continous Integration, automation)
 - Virtual environment and Development Tools
 - The command line terminal and essential unix commands
-- Cloud Native Microservices with  
-- Deploy a Sample Online Boutique 
+- Cloud Native Microservices and Docker Containers
+- Deploy and test a sample "Online Boutique" as containerized Web Application 
 
+# Databases
+- Analyse types of data to persist (structured tabular, images (blobs), dockument, key value)
+- Structured Query Language (SQL) Database PostGress, sqllite 
+- Document Database (mongodb)
+- Object Relational Mapping (ORM's)
+## Assignamnts
+  
 # Advanced NodeJS
-
+- Develop a WEB Server with node.js 
+- Routes 
+- Processing http, rest and JSON.
+- Javascript libraries 
+- Access external Services (authentication, paypal)
+- 
 
 
 # Module 1 Overview
 ## Introduction a target use case (e.g. online boutique)
-### Discuss Reuirements
+### Assignmant 1 : Design an Online Boutique
 - Authentication/login
-- View Products
-- Shopping Cart (add, get, empty)
-- Recommendations
-- Select Currenency (USD, CAD, GBP, ERO)
-- Checkout
-- Payment
-- Shipping (get quote, ship order)
-- Order Confirmation
+- View Products (Product Catalog): API Operations (list one product, list all products, search products)
+- Shopping Cart (Cart Service) : API Operations  (add product to cart, get cart, empty cart)
+- Recommendations (Recommendation Service) : API Operations (get 5 product recommendations) 
+- Select Currenency for payment(Currency Service) (USD, CAD, GBP, ERO)
+- Shipping Service: API Operations (get shipping quote, ship order)
+- Checkout Service: API Operations: Place Order 
+- Payment Service: API Operation: Charge Credit Card
+- Order Confirmation: Send email
 
-### Assignment
-- Describe Workflow
-- End user interaction 
-- Data Stored
+### Assignment 2
+- The API and Source Code for a Product Catalog Service is provided.
+#### Tasks  
+- Install tools (Docker Desktop, VScode) 
+- 
 
 # Module 2 : Conseptuel Web App Arcitecture
 - Frontend

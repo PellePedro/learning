@@ -11,13 +11,23 @@
 ```
 
 # Backend Developer
+Back-End Development
+
+Understand how a server interacts with a database
+Analyze the future of full-stack development through the lens of AWS and Shopify
+Learn how to run queries from a back-end database
+Apply web development principles to build functioning back-end code
+
 ## Program Learning Outcomes
-- Gain understanding the web technology (web servers, services, databases, Domain Name Service) 
-- API and protocol ()
-- Application Virtual Machines, Containers, Micro Services
-- Development Process (source control, Continous Integratoon, deployment)
-- Development Tools
-- AWS Cloud Services
+- Gain understanding of the web technology (servers, services, databases, Domain Names)  
+- Overview of API and protocol for communication (HTTP, REST, JSON, SQL)
+- WEB Application Architecture (scalability, resilience, distribution and micro servies) 
+- Deployment platforms (virtual servers, containers, function as a service (AWS lamda))
+- Defining AWS as Deployment System.  
+- Development Workflow (source control, github, Continous Integration, automation)
+- Virtual environment and Development Tools
+- The command line terminal and essential unix commands
+- Cloud Native Microservices with  
 - Deploy a Sample Online Boutique 
 
 # Advanced NodeJS

@@ -18,32 +18,37 @@ Analyze the future of full-stack development through the lens of AWS and Shopify
 Learn how to run queries from a back-end database
 Apply web development principles to build functioning back-end code
 
+# Backend Developer
+## Target Audience:
+- Web Desingers
+- Project Managers
+- Developers
+
 ## Program Learning Outcomes
-- Gain understanding of web technology (servers, services, databases, Domain Names)  
-- Overview of API and protocol for communication (browser frontend, IoT, HTTP, REST, JSON, SQL)
-- Real World WEB Application Architecture (scalability, resilience, distribution and micro servies) (load balancers, queues, redundance)
-- Deployment platforms (virtual servers, containers, function as a service (AWS lamda))
+- Gain understanding of web technology and terminology (servers, services, databases, domains)  
+- Learn concept of APIs and protocols (browser frontend, IoT, HTTP, REST, JSON, SQL)
+- Learn large scale WEB Application Architecture (scalability, resilience, distribution and micro servies)    (load balancers, queues, redundance)
+- Web Hosting platforms (virtual servers, containers, function as a service (AWS lamda))
 - Learn AWS as Deployment System.  
-- Devops and Development Workflow (source control, github, Continous Integration, automation)
-- Virtual environment and Development Tools
+- Development Workflow (source control, github, Continous Integration, devops, automation)
+- Virtual Environment and Development Tools
 - The command line terminal and essential unix commands
 - Cloud Native Microservices and Docker Containers
 - Deploy and test a sample "Online Boutique" as containerized Web Application 
 
 # Databases
-- Analyse types of data to persist (structured tabular, images (blobs), dockument, key value)
-- Structured Query Language (SQL) Database PostGress, sqllite 
+- Analyse types of data (structured tabular, images (blobs), document, key value), data science)
+- Structured Query Language (SQL) Databases (PostGress, sqllite) 
 - Document Database (mongodb)
 - Object Relational Mapping (ORM's)
 ## Assignamnts
   
 # Advanced NodeJS
 - Develop a WEB Server with node.js 
-- Routes 
+- Request and Routes 
 - Processing http, rest and JSON.
 - Javascript libraries 
-- Access external Services (authentication, paypal)
-- 
+- Access External Services (e.g. authentication, paypal)
 
 
 # Module 1 Overview

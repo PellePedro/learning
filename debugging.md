@@ -13,7 +13,7 @@
   COPY . .
   COPY --from=build /go/bin/dlv dlv
   COPY --from=build /app app
-  CND [ "/dlv" , "exec", "--listen=:40000", "--headless=true", "--api-version=2", "--accept-multiclient", "/app"]]
+  ENTRYPOINT [ "/dlv" , "exec", "--listen=:40000", "--headless=true", "--api-version=2", "--accept-multiclient", "/app"]]
   
   
   Command:

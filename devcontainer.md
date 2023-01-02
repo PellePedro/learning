@@ -34,9 +34,9 @@ GO_VERSION="1.19.4"
 GOLANG_TAR=linux-amd64.tar.gz
 GOLANG_DOWNLOAD_URL=https://dl.google.com/go/go${GO_VERSION}.${GOLANG_TAR}
 curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz
-tar -C /usr/local -xzf golang.tar.gz
+sudo tar -C /usr/local -xzf golang.tar.gz
 rm golang.tar.gz
-ln -sf /usr/local/go/bin/* /usr/local/bin
+sudo ln -sf /usr/local/go/bin/* /usr/local/bin
 rm -rf ${GOLANG_TAR}
 ```
 

@@ -27,3 +27,16 @@ LV_BRANCH='release-1.2/neovim-0.8' bash <(curl -s https://raw.githubusercontent.
 
 # Python
 ```
+
+### Install Go on Ubuntu
+```bash
+GO_VERSION="1.19.4"
+GOLANG_TAR=linux-amd64.tar.gz
+GOLANG_DOWNLOAD_URL=https://dl.google.com/go/go${GO_VERSION}.${GOLANG_TAR}
+curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz
+tar -C /usr/local -xzf golang.tar.gz
+rm golang.tar.gz
+ln -sf /usr/local/go/bin/* /usr/local/bin
+rm -rf ${GOLANG_TAR}
+```
+

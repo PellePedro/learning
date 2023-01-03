@@ -33,6 +33,10 @@ EOF
 ```
 POD_NAME=$(kubectl get pods -l app=slim -o jsonpath='{.items[0].metadata.name}')
 
+alt.
+POD_NAME=$(kubectl get pods -o custom-columns=NAME:metadata.name --no-headers)
+
+
 # no bash in the container
 $ kubectl exec -it -c app ${POD_NAME} -- bash
 error: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec "43d1e91f41310fb1ede9fbab741921091edfe116311f18a3881f90f68d06dc13": OCI runtime exec failed: exec failed: unable to start container process: exec: "bash": executable file not found in $PATH: unknown

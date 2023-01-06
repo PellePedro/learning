@@ -21,3 +21,14 @@ docker run -it pellepedro/dnsmasq \
   --cname=alias2.example.com,www.google.com \
 
 ```
+## Netplan
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: no
+      nameservers:
+          addresses: [172.17.0.2]
+```

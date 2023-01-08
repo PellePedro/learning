@@ -8,9 +8,9 @@ Example output
     server: https://10.0.1.106:6443
 ```
 
-# 
+# Tracing
 ```
-strace -ttt -o status.log skyramp status
-1673176929.738588 connect(3, {sa_family=AF_INET, sin_port=htons(6443), sin_addr=inet_addr("10.0.1.106")}, 16) = -1 EINPROGRESS (Operation now in progress)
+strace -ttt -o syscalls.log skyramp status
 
-```
+tcpdump -i eth0 -w network.pcap 'tcp port 6443'
+``

@@ -68,7 +68,7 @@ One can purchase domain names through a registrar which is accredited by the Int
 Overall, domain names provide a convenient and memorable way for users to find and access websites on the internet.
 
 [IBM What is DNS](https://www.youtube.com/watch?v=nyH0nYhMW9M)<BR/>
-[What is DNS](https://aws.amazon.com/route53/what-is-dns/)
+[What is DNS]([https://aws.amazon.com/route53/what-is-dns/](https://www.youtube.com/watch?v=e2xLV7pCOLI))
 
 # URL
 A URL, or uniform resource locator, is the specific address of a webpage or resource on the internet. It is used to identify and locate a specific file or webpage on the World Wide Web. A URL typically consists of several parts, including the protocol, the domain name, and the file path.

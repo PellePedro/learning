@@ -66,7 +66,7 @@ In simple terms, a Domain name serves as human-readable address that point to a 
 One can purchase domain names through a registrar which is accredited by the Internet Corporation for Assigned Names and Numbers (ICANN), a non-profit organization that oversees the allocation of domain names. Once you purchase a domain, you must renew it annually to maintain control over it.
 
 Overall, domain names provide a convenient and memorable way for users to find and access websites on the internet.
-
+[What is DNS](https://aws.amazon.com/route53/what-is-dns/)
 
 # URL
 A URL, or uniform resource locator, is the specific address of a webpage or resource on the internet. It is used to identify and locate a specific file or webpage on the World Wide Web. A URL typically consists of several parts, including the protocol, the domain name, and the file path.

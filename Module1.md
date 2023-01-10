@@ -66,6 +66,8 @@ In simple terms, a Domain name serves as human-readable address that point to a 
 One can purchase domain names through a registrar which is accredited by the Internet Corporation for Assigned Names and Numbers (ICANN), a non-profit organization that oversees the allocation of domain names. Once you purchase a domain, you must renew it annually to maintain control over it.
 
 Overall, domain names provide a convenient and memorable way for users to find and access websites on the internet.
+
+[IBM What is DNS](https://www.youtube.com/watch?v=nyH0nYhMW9M)<BR/>
 [What is DNS](https://aws.amazon.com/route53/what-is-dns/)
 
 # URL

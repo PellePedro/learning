@@ -13,6 +13,8 @@ The web is a constantly evolving ecosystem, and new technologies and standards a
 
 In short, the web is a vast network of interconnected documents and resources that can be accessed by a user via a web browser. The web pages are typically written in HTML, CSS, and JavaScript, and the browser uses these technologies to render the webpage and display it to the user. All this process happens through the interaction between the browser and the web server, which follow the HTTP protocol to send requests and responses, and all this happening over the internet.
 
+[Ref](https://www.preethikasireddy.com/post/how-the-web-works-part-ii-client-server-model-the-structure-of-a-web-application)
+
 # Backend Developer
 A backend developer is a software developer who specializes in the development of the server-side of web applications. They are responsible for building the infrastructure and logic that supports the front-end user interface, and they work closely with front-end developers and other members of the development team to create a cohesive and functional web application.
 

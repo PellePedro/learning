@@ -22,6 +22,11 @@ Input: text1 = "abcde", text2 = "ace"
 Output: 3  
 Explanation: The longest common subsequence is "ace" and its length is 3.
 
+Input: text1 = "ace", text2 = "abcde" 
+Output: 3  
+Explanation: The longest common subsequence is "ace" and its length is 3.
+
+
 Input: text1 = "abc", text2 = "abc"
 Output: 3
 Explanation: The longest common subsequence is "abc" and its length is 3.

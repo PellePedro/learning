@@ -13,6 +13,8 @@ The web is a constantly evolving ecosystem, and new technologies and standards a
 
 In short, the web is a vast network of interconnected documents and resources that can be accessed by a user via a web browser. The web pages are typically written in HTML, CSS, and JavaScript, and the browser uses these technologies to render the webpage and display it to the user. All this process happens through the interaction between the browser and the web server, which follow the HTTP protocol to send requests and responses, and all this happening over the internet.
 
+[Internet](https://youtu.be/Dxcc6ycZ73M?list=PLzdnOPI1iJNfMRZm5DDxco3UdsFegvuB7)
+
 [History of the World Wide Web](https://www.hanselminutes.com/292/history-of-http-and-the-world-wide-web-with-henrik-frystyk-nielsen)
 
 [How the web works](https://www.preethikasireddy.com/post/how-the-web-works-a-primer-for-newcomers-to-web-development-or-anyone-really)<BR/>

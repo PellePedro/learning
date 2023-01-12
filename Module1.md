@@ -15,6 +15,25 @@
 
 [](https://careerfoundry.com/en/blog/web-development/backend-developer-guide/)
 # How the Web Works
+The World Wide Web (WWW or Web) is a system of interlinked hypertext documents that are accessed via the Internet. It was created by Sir Tim Berners-Lee in 1989 while he was working at CERN, the European physics research organization. The Web uses a client-server model, where users interact with web browsers (clients) to request pages from web servers, which then return the requested information.
+
+The foundation of the Web is the Hypertext Transfer Protocol (HTTP), which is used to transfer data between the client and server. Web pages are written in Hypertext Markup Language (HTML), which provides the structure and layout of the page. Cascading Style Sheets (CSS) are used to control the visual presentation of the page, and JavaScript is used to add interactive elements and dynamic behavior.
+
+Web pages are identified by unique addresses called URLs (Uniform Resource Locators). When a user enters a URL into their web browser, the browser sends a request to the server for the corresponding page. The server then returns the HTML, CSS, and JavaScript files for the page, which the browser uses to render the page for the user.
+
+The Web also relies on the use of unique identifiers called IP addresses to identify and locate computers on the Internet. The Domain Name System (DNS) is used to match domain names (such as www.example.com) to the corresponding IP addresses.
+
+References:
+
+Berners-Lee, T., Fielding, R., & Masinter, L. (2005). "Uniform Resource Identifiers (URI): Generic Syntax". Internet Engineering Task Force (IETF).
+Deitel, P.J., Deitel, H.M. (2018) "Internet & World Wide Web: How to Program" Pearson.
+W3C (2022) "Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content"
+W3C (2022) "Cascading Style Sheets (CSS)
+ECMA International (2022) "ECMAScript Language Specification"
+IETF (2022) "Domain Name System (DNS) Parameters"
+
+
+# Take 2
 The web, or World Wide Web, is a vast network of interconnected documents and other resources, linked by hyperlinks and URLs. The web is built on top of the internet, which is a global network of connected computers.
 
 When a user wants to access a webpage, they use a web browser, such as Chrome or Firefox, to send a request to the server where the webpage is located. The request is sent using the Hypertext Transfer Protocol (HTTP), which is the standard protocol for communication on the web.

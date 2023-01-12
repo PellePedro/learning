@@ -106,6 +106,32 @@ One can purchase domain names through a registrar which is accredited by the Int
 
 Overall, domain names provide a convenient and memorable way for users to find and access websites on the internet.
 
+The Domain Name System (DNS) is a hierarchical and decentralized naming system for computers, services, or any resource connected to the Internet or a private network. It translates more easily memorized domain names, such as www.example.com, to the numerical IP addresses, such as 192.0.2.1, that computers use to identify each other on the network.
+
+DNS is an essential component of the Internet infrastructure, as it allows users to access websites and other resources using human-readable domain names rather than IP addresses. Without DNS, users would have to remember and manually enter the IP addresses of the websites they wish to visit, which would be a cumbersome and error-prone process.
+
+The DNS system is organized into a hierarchy of domain names, with the top-level domains (TLDs) being the highest level. TLDs such as .com, .org, and .edu are managed by the Internet Corporation for Assigned Names and Numbers (ICANN). Below the TLDs, there can be multiple levels of subdomains, such as www.example.com, where "example" is the second-level domain and "www" is the third-level domain.
+
+DNS works by using a distributed database of domain name-to-IP address mappings, called the DNS namespace. This database is distributed across multiple DNS servers, and each server is responsible for a specific portion of the namespace. When a client computer requests a website using its domain name, the request is first sent to a local DNS resolver, which then queries the appropriate DNS server for the IP address of the requested website. This process is called DNS resolution.
+
+It's important to note that the DNS system is not only used for websites but also for other types of network resources such as email servers, FTP servers, and more. In addition, DNS can be used for load balancing and for providing failover capabilities for servers.
+
+References:
+
+IETF (2022) "Domain Name System (DNS) Parameters"
+Albitz, P. and Liu, C. (2012) "DNS and BIND" O'Reilly Media
+Liu, Cricket (2017) "DNS and BIND" O'Reilly Media
+Roessler, P. (2018) "DNS and BIND on IPv6" O'Reilly Media
+
+
+
+
+
+
+
+
+
+
 [IBM What is DNS](https://www.youtube.com/watch?v=nyH0nYhMW9M)<BR/>
 [What is DNS]([https://aws.amazon.com/route53/what-is-dns/](https://www.youtube.com/watch?v=e2xLV7pCOLI))
 

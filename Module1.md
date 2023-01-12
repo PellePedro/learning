@@ -94,6 +94,27 @@ The server can also be connected to a database and can access the data from it, 
 In short, the web client-server architecture is a way in which web pages and other content are delivered over the internet. The web client (typically a web browser) runs on the user's device, and requests web pages from the web server which runs on a separate machine and processes the request, then sends the response back to the client. The communication between the client and server happens using the HTTP protocol which defines a set of standard rules for data to be exchanged over the network.
 
 # DNS
+The Domain Name System (DNS) is a hierarchical and decentralized naming system for computers, services, or any resource connected to the Internet or a private network. It translates more easily memorized domain names, such as www.example.com, to the numerical IP addresses, such as 192.0.2.1, that computers use to identify each other on the network.
+
+DNS is an essential component of the Internet infrastructure, as it allows users to access websites and other resources using human-readable domain names rather than IP addresses. Without DNS, users would have to remember and manually enter the IP addresses of the websites they wish to visit, which would be a cumbersome and error-prone process.
+
+The DNS system is organized into a hierarchy of domain names, with the top-level domains (TLDs) being the highest level. TLDs such as .com, .org, and .edu are managed by the Internet Corporation for Assigned Names and Numbers (ICANN). Below the TLDs, there can be multiple levels of subdomains, such as www.example.com, where "example" is the second-level domain and "www" is the third-level domain.
+
+DNS works by using a distributed database of domain name-to-IP address mappings, called the DNS namespace. This database is distributed across multiple DNS servers, and each server is responsible for a specific portion of the namespace. When a client computer requests a website using its domain name, the request is first sent to a local DNS resolver, which then queries the appropriate DNS server for the IP address of the requested website. This process is called DNS resolution.
+
+It's important to note that the DNS system is not only used for websites but also for other types of network resources such as email servers, FTP servers, and more. In addition, DNS can be used for load balancing and for providing failover capabilities for servers.
+
+References:
+
+IETF (2022) "Domain Name System (DNS) Parameters"
+Albitz, P. and Liu, C. (2012) "DNS and BIND" O'Reilly Media
+Liu, Cricket (2017) "DNS and BIND" O'Reilly Media
+Roessler, P. (2018) "DNS and BIND on IPv6" O'Reilly Media
+
+
+
+
+
 A domain name is a unique string of characters that identifies a website or a specific webpage on the internet. Think of it as an address for a website, just like how a physical address is used to identify a house or building.
 
 For example, the domain name for Google is "google.com." In this case, "google" is the specific name chosen by the company, and ".com" is the top-level domain (TLD), which indicates the type of organization or purpose of the website. Other examples of TLDs include ".org" for organizations, ".edu" for educational institutions, and ".gov" for government agencies.

@@ -84,7 +84,7 @@ sudo apt-get install -y nodejs
 
 ## Install neovim
 ```
-cat <<EOF
+cat <<EOF > Dockerfile.nvim
 FROM debian:bullseye as builder
 
 #ARG NVIM_RELEASE=release

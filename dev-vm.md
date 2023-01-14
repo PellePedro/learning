@@ -38,7 +38,8 @@ sudo apt-get install \
   vim             \
   zsh             \
   python3         \
-  python3-dev
+  python3-dev     \
+  python3-venv
 
 sudo ln -sf python3 /usr/bin/python \
     && python -m ensurepip \

@@ -62,6 +62,7 @@ rm -rf ${GOLANG_TAR}
 
 ## Install go tools
 ```
+
 go install github.com/jesseduffield/lazygit@latest
 go install github.com/fatih/gomodifytags@latest
 go install github.com/josharian/impl@latest
@@ -69,6 +70,8 @@ go get -u github.com/cweill/gotests/...
 go get -u github.com/koron/iferr
 
 go install honnef.co/go/tools/cmd/staticcheck@2022.1
+go install github.com/go-delve/delve/cmd/dlv@latest
+go install golang.org/x/tools/gopls@latest
 
 # Node
 curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - &&\

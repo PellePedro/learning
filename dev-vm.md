@@ -26,6 +26,31 @@ uidmap
        
 ```
 
+## Core packages
+```
+sudo apt-get install \
+  bash            \
+  bind-tools      \
+  build-base      \
+  ca-certificates \
+  curl            \
+  fzf             \
+  git             \
+  libstdc++       \
+  net-tools       \
+  nnn             \
+  ripgrep         \
+  vim             \
+  zsh             \
+  python3         \
+  python3-dev
+
+ln -sf python3 /usr/bin/python \
+    && python -m ensurepip \
+    && pip3 install --no-cache --upgrade pip setuptools codespell 
+```
+
+
 ## Install Golang
 ```
 GO_VERSION="1.19.4"
@@ -38,3 +63,21 @@ sudo ln -sf /usr/local/go/bin/* /usr/local/bin
 rm -rf ${GOLANG_TAR}
 
 ```
+
+
+## Install go tools
+```
+go install github.com/jesseduffield/lazygit@latest
+go install github.com/fatih/gomodifytags@latest
+go install github.com/josharian/impl@latest
+go get -u github.com/cweill/gotests/...
+go get -u github.com/koron/iferr
+
+go install honnef.co/go/tools/cmd/staticcheck@2022.1
+
+# Node
+curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+```
+
+

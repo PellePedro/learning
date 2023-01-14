@@ -142,6 +142,6 @@ EOF
 
 ## Build and install nvim
 ```
-DOCKER_BUILDKIT=1 docker build --target=artifact --output type=local,dest=/usr/local -f Dockerfile.nvim  .
+sudo DOCKER_BUILDKIT=1 docker build --target=artifact --output type=local,dest=/ -f Dockerfile.nvim  .
 ```
 

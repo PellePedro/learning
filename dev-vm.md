@@ -29,15 +29,10 @@ uidmap
 ## Core packages
 ```
 sudo apt-get install \
-  bash            \
-  bind-tools      \
-  build-base      \
   ca-certificates \
   curl            \
   fzf             \
   git             \
-  libstdc++       \
-  net-tools       \
   nnn             \
   ripgrep         \
   vim             \
@@ -45,7 +40,7 @@ sudo apt-get install \
   python3         \
   python3-dev
 
-ln -sf python3 /usr/bin/python \
+sudo ln -sf python3 /usr/bin/python \
     && python -m ensurepip \
     && pip3 install --no-cache --upgrade pip setuptools codespell 
 ```

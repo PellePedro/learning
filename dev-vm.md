@@ -39,7 +39,7 @@ sudo apt-get install \
   zsh             \
   python3         \
   python3-dev     \
-  python3-venv
+  python3-pip
 
 sudo ln -sf python3 /usr/bin/python \
     && python -m ensurepip \

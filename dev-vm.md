@@ -150,7 +150,7 @@ RUN luarocks build mpack && \
 ENV CMAKE_EXTRA_FLAGS="-DENABLE_JEMALLOC=OFF" \
   CMAKE_BUILD_TYPE="RelWithDebInfo"
 
-RUN git clone https://github.com/neovim/neovim.git --branch $NVIM_RELEASE \
+RUN git clone https://github.com/neovim/neovim.git --branch \$NVIM_RELEASE \
   && cd neovim \
   && make \
   && make install
@@ -165,4 +165,11 @@ EOF
 ```
 sudo DOCKER_BUILDKIT=1 docker build --target=artifact --output type=local,dest=/ -f Dockerfile.nvim  .
 ```
+
+## Install lunarvim
+```
+bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+```
+
+
 

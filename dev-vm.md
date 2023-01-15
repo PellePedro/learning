@@ -46,6 +46,25 @@ sudo ln -sf python3 /usr/bin/python \
     && pip3 install --no-cache --upgrade pip setuptools codespell 
 ```
 
+## Install Docker
+```
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+    
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository \
+  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) \
+  stable"
+
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+sudo usermod -aG docker ${USER}
+```
 
 ## Install Golang
 ```
@@ -70,6 +89,7 @@ go install github.com/josharian/impl@latest
 go get -u github.com/cweill/gotests/...
 go get -u github.com/koron/iferr
 
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.50.1
 go install honnef.co/go/tools/cmd/staticcheck@2022.1
 go install github.com/go-delve/delve/cmd/dlv@latest
 go install golang.org/x/tools/gopls@latest

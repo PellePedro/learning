@@ -171,5 +171,7 @@ sudo DOCKER_BUILDKIT=1 docker build --target=artifact --output type=local,dest=/
 bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 ```
 
-
+```
+alias lvim=/home/ubuntu/.local/bin/lvim
+```
 

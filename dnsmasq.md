@@ -14,6 +14,18 @@ dnsmasq --address=/skyramp.test/10.0.1.71 \
 ```
 
 ```
+dnsmasq --address=/skyramp.test/10.0.1.71 \
+  --no-daemon \
+  --listen-address=0.0.0.0 \
+  --interface=eth0 \
+  --log-queries \
+  --no-resolv \
+  --no-hosts \
+  --server=127.0.0.1
+
+```
+
+```
 docker run -it pellepedro/dnsmasq \
   --no-resolve \
   --port=8053 --keep-in-foreground --no-daemon --no-hosts --log-queries \

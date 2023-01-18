@@ -16,7 +16,7 @@ dnsmasq --address=/skyramp.test/10.0.1.71 \
 ```
 dnsmasq --address=/skyramp.test/127.0.0.1 \
   --no-daemon \
-  --listen-address=127.0.0.1 \
+  --listen-address=0.0.0.0 \
   --interface=eth0 \
   --log-queries \
   --no-hosts 

@@ -19,10 +19,7 @@ dnsmasq --address=/skyramp.test/10.0.1.71 \
   --listen-address=0.0.0.0 \
   --interface=eth0 \
   --log-queries \
-  --no-resolv \
-  --no-hosts \
-  --server=127.0.0.23
-
+  --no-hosts 
 ```
 
 ```

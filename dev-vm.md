@@ -66,6 +66,18 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo usermod -aG docker ${USER}
 ```
 
+## Install docker compose
+[ref](https://github.com/josepmariatuset/jenkins-sessions/blob/c1d3d9031bef47e1851edac5333c5fb28a5d84e8/Dockerfile)
+```
+curl --fail -sL https://api.github.com/repos/docker/compose/releases/latest| grep tag_name | cut -d '"' -f 4 | tee /tmp/compose-version
+sudo mkdir -p /usr/lib/docker/cli-plugins 
+sudo  curl --fail -sL -o /usr/lib/docker/cli-plugins/docker-compose https://github.com/docker/compose/releases/download/$(cat /tmp/compose-version)/docker-compose-$(uname -s)-$(uname -m)
+sudo chmod +x /usr/lib/docker/cli-plugins/docker-compose
+sudo ln -s /usr/lib/docker/cli-plugins/docker-compose /usr/bin/docker-compose
+rm /tmp/compose-version
+```
+
+
 ## Install Golang
 ```
 GO_VERSION="1.19.4"

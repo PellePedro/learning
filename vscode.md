@@ -23,10 +23,18 @@
             "command": "go",
             "args": [
                 "build",
-                "-gcflags=\"all=-N -l\"",
+                "-gcflags",
+                "all=-N -l",
+                "-o",
+                "${fileDirname}/__debug_bin"
                 "./..."
             ],
-            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "CGO_ENABLED": "1"
+                 }
+            },
             "type": "shell",
             "problemMatcher": []
         },
@@ -75,6 +83,9 @@
         "maxStringLen": 10000,
       },
     },
+    "go.alternateTools": {
+        "dlv": "<absolute path to your dlv binary>"
+    }
     "go.lintTool": "golangci-lint",
     "go.testTags": "dev,unittest_prod",
     "go.testFlags": [
@@ -117,4 +128,50 @@
     ],
 }
 
+
+https://github.com/golang/vscode-go/blob/master/docs/debugging.md
+
 ```
+{
+    ...
+    "tasks": [
+        {
+            "label": "go: build (debug)",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-gcflags=all=-N -l",
+                "-o",
+                "${fileDirname}/__debug_bin"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            ...
+        }
+    ]
+}
+```
+
+
+```
+    ...
+    "configurations": [
+        {
+            "name": "Launch Package as root",
+            "type": "go",
+            "request": "launch",
+            "mode": "exec",
+            "asRoot": true,
+            "console": "integratedTerminal",
+            "program": "${fileDirname}/__debug_bin",
+            "preLaunchTask": "go: build (debug)",
+        }
+    ]
+```
+
+"go.alternateTools": {
+    "dlv": "<absolute path to your dlv binary>"
+}
+

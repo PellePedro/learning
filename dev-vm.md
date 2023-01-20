@@ -195,3 +195,8 @@ unzip awscliv2.zip
 sudo ./aws/install
 sudo pip install aws-mfa
 ```
+
+## Login to AWS registry
+```
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j1n2c2p2
+```

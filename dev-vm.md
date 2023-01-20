@@ -200,3 +200,10 @@ sudo pip install aws-mfa
 ```
 aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j1n2c2p2
 ```
+
+## Install kubectl
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+shmod +x kubectl
+sudo mv kubectl /usr/local/bin
+```

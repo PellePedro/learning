@@ -133,7 +133,6 @@ https://github.com/golang/vscode-go/blob/master/docs/debugging.md
 
 ```
 {
-    ...
     "tasks": [
         {
             "label": "go: build (debug)",
@@ -148,7 +147,6 @@ https://github.com/golang/vscode-go/blob/master/docs/debugging.md
             "options": {
                 "cwd": "${fileDirname}"
             },
-            ...
         }
     ]
 }

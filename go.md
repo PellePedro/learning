@@ -26,7 +26,7 @@
 
 ## Installing
 ```
-GO_VERSION="1.19.4"
+GO_VERSION="1.19.5"
 GOLANG_TAR=linux-amd64.tar.gz
 GOLANG_DOWNLOAD_URL=https://dl.google.com/go/go${GO_VERSION}.${GOLANG_TAR}
 curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz
@@ -35,6 +35,38 @@ rm golang.tar.gz
 sudo ln -sf /usr/local/go/bin/* /usr/local/bin
 rm -rf ${GOLANG_TAR}
 ```
+
+## Delve
+
+[Delve](https://github.com/go-delve/delve/tree/master/Documentation/cli)
+```
+dlv debug --headless --listen=:2345 --log --api-version=2 ./cmd/worker
+    
+```
+
+## VScode
+[Vscode](https://github.com/golang/vscode-go/wiki/debugging-legacy)<BR/>
+[Remote Debugging](https://github.com/golang/vscode-go/wiki/debugging-legacy#remote-debugging)
+```
+{
+    "name": "Launch remote",
+    "type": "go",
+    "request": "attach",
+    "mode": "remote",
+    "substitutePath": [
+		{
+			"from": "/home/ubuntu/git/letsramp/skyramp",
+			"to": "/workspacee",
+		},
+	],
+    "port": 2345,
+    "host": "127.0.0.1",
+    "debugAdapter": "legacy",
+    "cwd": "/home/ubuntu/git/letsramp/skyramp",
+}
+```
+
+
 
 
 <details>

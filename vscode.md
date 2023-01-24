@@ -2,6 +2,22 @@
 
 [example 1](https://github.com/Shareable-Resources/eurus/blob/5b26db2a094715d7deb44e1a4f2c41cca966247c/eurus-backend/.vscode/tasks.json)
 
+```
+    {
+        "name": "Connect to server",
+        "type": "go",
+        "request": "attach",
+        "mode": "remote",
+        "remotePath": "${workspaceFolder}",
+        "port": 2345,
+        "host": "127.0.0.1"
+    },
+
+
+dlv exec ./worker --listen=:2345 --headless --accept-multiclient --api-version=2 --log
+
+```
+
 .vscode/tasks.json
 ```
 {

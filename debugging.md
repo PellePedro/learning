@@ -35,8 +35,8 @@
 ```
 
 
-b tester.go:55
-b tester.go:182
+b /workspace/pkg/tester/tester.go/tester.go:55
+b /workspace/pkg/tester/tester.go/tester.go:182
 
 
 ```

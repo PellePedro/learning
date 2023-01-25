@@ -12,9 +12,111 @@
 <BR/>
 [The Internet: Encryption & Public Keys](https://www.youtube.com/watch?v=ZghMPWGXexs&list=PLzdnOPI1iJNfMRZm5DDxco3UdsFegvuB7&index=7)
 
+in the previous section, we learned that the Domain Name System (DNS) provides a human-friendly name for a Web server's IP address. This means that instead of having to remember a long string of numbers and letters, we can use a domain name, such as "www.example.com" to access a website.
+
+However, even with the use of domain names, we still need a way to describe a specific resource within that server, such as a web page. This is where the Uniform Resource Locator, or URL, comes in.
+
+A URL is a string of text that describes the location of a resource on the Internet. It typically includes the protocol used to access the resource, such as "http" or "https", the domain name or IP address of the server, and the location of the resource within the server, such as a file path or a specific page on a website.
+
+For example, "https://www.example.com/about-us" is a URL that points to the "about-us" page on the "example.com" website.
+
+Therefore, while DNS provides a way to easily remember and access a web server, URLs provide a way to identify and access specific resources within that server. It's important to remember that DNS and URLs work together to make it easy for us to access the resources on the Internet.
+
+
+
+
+In previous section we learned Domain Name System (DNS) provides a human-friendly name for a Web server's IP address. Still we still need a way to describe a specific resource, such as a web page, within that server.
+
+For this purpose, we use a Uniform Resource Locator, or URL for short. A URL is a string of text that describes the location of a resource on the Internet. It typically includes the protocol used to access the resource (such as "http" or "https"), the domain name or IP address of the server, and the location of the resource within the server (such as a file path or a specific page on a website).
+
+For example, "https://www.example.com/about-us" is a URL that points to the "about-us" page on the "example.com" website.
+
+Therefore, while DNS provides a way to easily remember and access a web server, URLs provide a way to identify and access specific resources within that server.
+
+
+
+
+While IP addresses are enough to identify a host, but they are not very convenient for humans to remember.
+To solve this, we the more userfriendly Domain Name System (DNS). DNS is a hierarcical  
+
+
+While IP addresses are enough to identify devices on the Internet, they can be difficult for humans to remember.
+
+
+Every device connected to the Internet has at least one IP address.
+
+Just as your home has a unique address that is used to identify its location, devices connected to the Internet also have a unique address that is used to identify their location on the network.
+
+This address is called an Internet Protocol Address, or IP Address for short. Every device that connects to the Internet, whether it's a computer, smartphone, or even a smart fridge, has its own unique IP address.
+TCP/IP Illustrated, Volume 1, The Protocols
+
+
+Devices used in private networks based on the TCP/IP protocols also require IP addresses. In either case, the forwarding procedures implemented by IP routers (see Chapter 5) use IP addresses to identify where traffic is going. IP addresses also indicate where traffic has come from. IP addresses are similar in some ways to telephone numbers, but whereas telephone numbers are often known and used directly by end users, IP addresses are often shielded from a user’s view by the Internet’s DNS (see Chapter 11), which allows most users to use names instead of numbers. 
+
+
+Users are confronted with manipulating IP addresses when they are required to set up networks themselves or when the DNS has failed for some reason. To understand how the Internet identifies hosts and routers and delivers traffic between them, we must understand the role of IP addresses. We are therefore interested in their administration, structure, and uses.
+
+
+
+A client-server architecture is a distributed computing model in which a client program sends requests to a server program over a network, and the server program responds to those requests. The client and the server are separate entities that run on different devices and communicate with each other using a standard protocol, such as HTTP or TCP/IP.  
+
+As a backend developer, it is essential to have a solid understanding of design patterns and architecture. One of the fundamental concepts in web development is the client-server architecture. 
+
+In this architecture, the client, such as a web browser, connects to a server and sends a request for data. The server then receives the request and responds by providing the requested information or data. 
+
+Understanding this architecture is vital for designing and building efficient, scalable, and maintainable backend systems.
+
+
+This architecture allows for the separation of concerns and enables the client and server to operate independently. Understanding this architecture is vital for designing and building efficient, scalable, and maintainable backend systems. Additionally, learning and understanding design patterns can help a developer to make more informed design decisions and write more organized, reusable code.
+
+explain this as a teacher "As a backend developer, it's important to learn and understand design patterns and architecture.
+The Web follows a client-server architecture, where the client connects and sends a request to the server to reuest data and the server receives the request and responds with requested data or information."
+
+
+understand 
+
+
+how the client and server interact and communicate with each other. The Web uses a client-server architecture, where one or more clients connect to the server to access resources and services.
+
+
+
+
+applications that operate over a network are designed using a small number of specific patterns. Two of the most commonly used patterns are the client-server and peer-to-peer models. The client-server model is a centralized architecture, where one or more clients connect to a central server to access resources and services. 
+
+
+As a backend developer, it is important to have a good understanding of the client-server architecture.
+
+The client-server architecture is a way of organizing and structuring a software application, where the client and server interact with each other to complete a task. The client, in this case, refers to the device or application that makes a request to the server, and the server refers to the device or application that receives the request and responds with the requested data or information.
+
+For example, when a user visits a website, their web browser (the client) sends a request to the server where the website is hosted. The server then responds by sending back the HTML, CSS, and JavaScript files that the browser uses to display the website to the user.
+
+As a backend developer, it's important to understand how the client and server interact and communicate with each other. This includes understanding the different types of requests and responses, such as GET and POST requests, and how to handle and process them on the server side. Additionally, it's important to understand the different protocols and technologies that are used for communication between the client and server, such as HTTP and HTTPS.
+
+By understanding the client-server architecture, backend developers can develop and maintain server-side code that is able to effectively handle client requests and respond with the appropriate data or information.
+
 
 [](https://careerfoundry.com/en/blog/web-development/backend-developer-guide/)
 # How the Web Works
+
+but they can be difficult for humans to remember or use effectively. To address this issue, we use the Domain Name System (DNS) which allows for more user-friendly domain names to be associated with specific IP addresses.
+
+"HTTP, or Hypertext Transfer Protocol, is a communication protocol used for transmitting data over the World Wide Web. It is the foundation of data communication for the web and is based on a request-response model.
+
+When a client, such as a web browser, wants to request information from a server, it sends an HTTP request message. This message contains a method, such as GET or POST, that specifies the action to be taken, a URI or URL identifying the resource to be acted upon, and various headers providing additional information about the request.
+
+The server then processes the request and sends an HTTP response message back to the client. This message contains a status code indicating the outcome of the request, such as 200 for a successful request or 404 for a page not found, as well as headers and a message body containing the requested information.
+
+It's worth noting that HTTPS is the secure version
+
+Today, we will begin exploring the fundamental concepts of the World Wide Web by examining the layered stack from the bottom up. Our focus will be on the network, or connectivity, layer - the backbone of the global network that enables computers to communicate with one another using numerical IP addresses, such as 172.217.13.132. Let's dive in and gain a deeper understanding of how this critical component functions.
+
+
+IP addresses are enough to identify a host, but they are not very convenient for humans to remember or manipulate
+
+applications that operate over a network are designed using a small number of specific patterns. Two of the most commonly used patterns are the client-server and peer-to-peer models. The client-server model is a centralized architecture, where one or more clients connect to a central server to access resources and services. 
+
+
+
 The World Wide Web (WWW or Web) is a system of interlinked hypertext documents that are accessed via the Internet. It was created by Sir Tim Berners-Lee in 1989 while he was working at CERN, the European physics research organization. The Web uses a client-server model, where users interact with web browsers (clients) to request pages from web servers, which then return the requested information.
 
 The foundation of the Web is the Hypertext Transfer Protocol (HTTP), which is used to transfer data between the client and server. Web pages are written in Hypertext Markup Language (HTML), which provides the structure and layout of the page. Cascading Style Sheets (CSS) are used to control the visual presentation of the page, and JavaScript is used to add interactive elements and dynamic behavior.

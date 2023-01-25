@@ -35,8 +35,11 @@
 ```
 
 b tester_local.go:63
-b /workspace/pkg/tester/tester.go/tester.go:619
-b /workspace/pkg/tester/tester.go/tester.go:742
+b /workspace/pkg/tester/tester.go:619
+ls /workspace/pkg/tester/tester.go:619
+
+b /workspace/pkg/tester/tester.go:742
+ls /workspace/pkg/tester/tester.go:742
 
 
 ```

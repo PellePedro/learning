@@ -38,8 +38,11 @@ b tester_local.go:63
 b pkg/tester/tester.go:619
 ls pkg/tester/tester.go:619
 
+
 b pkg/tester/tester.go:742
 ls pkg/tester/tester.go:742
 
+b pkg/tester/thrift.go:136
+ls pkg/tester/thrift.go:136
 
 ```

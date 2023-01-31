@@ -1,4 +1,5 @@
-ARG DLV_VERSION=v1.20.1                                                                                                         [0/0]
+```
+ARG DLV_VERSION=v1.20.1                                                                                                        
 ARG GOPLS_VERSION=v0.11.0
 
 FROM qmcgaw/binpot:dlv-${DLV_VERSION} AS dlv
@@ -24,6 +25,5 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
 
 RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 
-# ENV GOPROXY=file://$GOPATH/pkg/mod/cache/download
-
 CMD ["sleep" , "360000"]
+```

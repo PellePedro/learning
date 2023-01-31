@@ -28,6 +28,6 @@ resolution.
 
 Reference:
 
-- IETF RFC 2132: ["DHCP Options and BOOTP Vendor Extensions"](https://www.rfc-editor.org/rfc/rfc2132#section-3.8). This RFC specifies the format of DHCP options and the options available for use by DHCP clients and servers.
+- IETF RFC 2132: "DHCP Options and BOOTP Vendor Extensions". This RFC specifies the format of DHCP options and the options available for use by DHCP clients and servers.[RFC 2132 (DNS)](https://www.rfc-editor.org/rfc/rfc2132#section-3.8)
 - IETF RFC 4702: "The Use of DHCP Option 43 and Option 60 for Lightweight Access Point Discovery and Configuration". This RFC specifies the use of DHCP options 43 and 60 for configuring lightweight access points.
 It is important to note that DHCP options are not standardized across all DHCP implementations, and the availability and use of specific options may vary. However, options 6, 15, and 81 are commonly used for configuring DNS servers in DHCP.

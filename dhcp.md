@@ -24,8 +24,10 @@ The IP addresses are listed in order of priority.
 - Option 15 (Domain Name): This option specifies the domain name to be used by the client for host name-to-IP address 
 resolution.
 - Option 81 (FQDN, Fully Qualified Domain Name): This option is used to provide the client with its fully-qualified domain name and its corresponding domain name servers.
+
+
 Reference:
 
-- IETF RFC 2132: "DHCP Options and BOOTP Vendor Extensions". This RFC specifies the format of DHCP options and the options available for use by DHCP clients and servers.
+- IETF RFC 2132: ["DHCP Options and BOOTP Vendor Extensions"](https://www.rfc-editor.org/rfc/rfc2132#section-3.8). This RFC specifies the format of DHCP options and the options available for use by DHCP clients and servers.
 - IETF RFC 4702: "The Use of DHCP Option 43 and Option 60 for Lightweight Access Point Discovery and Configuration". This RFC specifies the use of DHCP options 43 and 60 for configuring lightweight access points.
 It is important to note that DHCP options are not standardized across all DHCP implementations, and the availability and use of specific options may vary. However, options 6, 15, and 81 are commonly used for configuring DNS servers in DHCP.

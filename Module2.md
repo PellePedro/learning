@@ -41,12 +41,23 @@ HTTP is on top, at the application layer. Although important for diagnosing netw
 layers are mostly irrelevant to the description of HTTP.
 
 
+## GPT
+Good morning, students! I hope you are all ready for today's lecture on the HTTP protocol. HTTP, as you know, stands for HyperText Transfer Protocol and it is a fundamental component of the World Wide Web.
+
+The protocol is based on the client-server architecture where the client, or user-agent, sends requests to the server, which then provides the corresponding response. The user-agent can be a web browser, a robot, or any other entity capable of sending requests.
+
+In between the client and the server, there may be one or more intermediaries, commonly known as proxies, which perform various functions such as acting as gateways or caching content. These proxies can help improve the overall efficiency of the system by reducing the number of requests sent to the server and by storing frequently requested data.
+
+It is also worth mentioning that there are many other components involved in the communication process, such as routers and modems, but they are hidden in the lower layers of the network and do not directly interact with the HTTP protocol. HTTP operates at the application layer and is essential for diagnosing network issues.
+
+In conclusion, HTTP is a widely used protocol for communication and data transfer on the Web. It is a crucial aspect of the World Wide Web and an important topic for anyone looking to gain a deeper understanding of the inner workings of the Internet.
+
+
 
 # Basic aspects of HTTP
 
 ## HTTP is simple
-HTTP is generally designed to be simple and human-readable, even with the added complexity introduced 
-in HTTP/2 by encapsulating HTTP messages into frames. HTTP messages can be read and understood by humans, 
+HTTP is generally designed to be simple and human-readable. HTTP messages can be read and understood by humans, 
 providing easier testing for developers, and reduced complexity for newcomers.
 
 ## HTTP is extensible
@@ -147,6 +158,9 @@ where old pieces of software coexist with modern versions. HTTP pipelining has b
 with more robust multiplexing requests within a frame.
 
 ## HTTP Messages
+
+METHOD
+HEADERS
 
 
 

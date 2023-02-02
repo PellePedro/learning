@@ -124,8 +124,8 @@ spec:
         app: test
     spec:
       containers:
-      - name: name
-        image: nginx
+      - name: busybox
+        image: busybox
         imagePullPolicy: Always
         ports:
         - containerPort: 80

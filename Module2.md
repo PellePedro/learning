@@ -19,6 +19,13 @@ it is used to not only fetch hypertext documents, but also images and videos or 
 to servers, like with HTML form results. HTTP can also be used to fetch parts of documents to update 
 Web pages on demand.
 
+## GPT
+"Students, today we are discussing the HyperText Transfer Protocol or HTTP. This protocol is the backbone of all data exchange on the World Wide Web. It is a client-server type protocol where the client, typically a web browser, initiates the request for resources such as HTML documents. The complete document is constructed from various sub-documents like text, images, videos, scripts, and more.
+
+HTTP operates by exchanging individual messages, not a stream of data, between the client and server. The client sends a request and the server responds with a response.
+
+HTTP was developed in the early 1990s and has evolved over time. It is an application layer protocol that runs over a reliable transport protocol, such as TCP or a TLS-encrypted TCP connection. Additionally, due to its extensibility, it can be used for various purposes beyond just fetching HTML documents, such as posting content to servers, and updating web pages on demand. That's a brief overview of HTTP, any questions?"
+
 ## Components of HTTP-based systems
 HTTP is a client-server protocol: requests are sent by one entity, the user-agent (or a proxy on behalf of it). 
 Most of the time the user-agent is a Web browser, but it can be anything, for example, a robot that crawls the 

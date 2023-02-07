@@ -171,3 +171,67 @@ the ability to add headers, allows HTTP to advance along with the extended capab
 Though HTTP/2 adds some complexity by embedding HTTP messages in frames to improve performance, 
 the basic structure of messages has stayed the same since HTTP/1.0. Session flow remains simple, 
 allowing it to be investigated and debugged with a simple HTTP message monitor.
+
+
+
+
+
+HTTP headers are pieces of information that accompany HTTP requests or responses, serving as metadata. They convey details about security and the body of the request or response. All header fields follow a standardized format, consisting of a case-insensitive string (the field name) followed by a colon and its corresponding value. The format of the value is dependent on the header field and its intended purpose.
+
+
+###
+The POST verb is most-often utilized to **create** new resources. On successful creation, return HTTP status 201, returning a Location header with a link to the newly-created resource with the 201 HTTP status.
+
+POST is neither safe nor idempotent. It is therefore recommended for non-idempotent resource requests. Making two identical POST requests will most-likely result in two resources containing the same information.
+
+Examples:
+
+POST http://www.example.com/customers
+POST http://www.example.com/customers/12345/orders
+
+The HTTP GET method is used to read (or retrieve) a representation of a resource. In the “happy” (or non-error) path, GET returns a representation in XML or JSON and an HTTP response code of 200 (OK). In an error case, it most often returns a 404 (NOT FOUND) or 400 (BAD REQUEST).
+
+According to the design of the HTTP specification, GET (along with HEAD) requests are used only to read data and not change it. Therefore, when used this way, they are considered safe. That is, they can be called without risk of data modification or corruption—calling it once has the same effect as calling it 10 times, or none at all. Additionally, GET (and HEAD) is idempotent, which means that making multiple identical requests ends up having the same result as a single request.
+
+Do not expose unsafe operations via GET—it should never modify any resources on the server.
+
+Examples:
+
+GET http://www.example.com/customers/12345
+GET http://www.example.com/customers/12345/orders
+GET http://www.example.com/buckets/sample
+
+
+
+PUT is most-often utilized for update capabilities, PUT-ing to a known resource URI with the request body containing the newly-updated representation of the original resource.
+
+However, PUT can also be used to create a resource in the case where the resource ID is chosen by the client instead of by the server. In other words, if the PUT is to a URI that contains the value of a non-existent resource ID. Again, the request body contains a resource representation. Many feel this is convoluted and confusing. Consequently, this method of creation should be used sparingly, if at all.
+
+Alternatively, use POST to create new resources and provide the client-defined ID in the body representation—presumably to a URI that doesn't include the ID of the resource (see POST below).
+
+On successful update, return 200 (or 204 if not returning any content in the body) from a PUT. If using PUT for create, return HTTP status 201 on successful creation. A body in the response is optional—providing one consumes more bandwidth. It is not necessary to return a link via a Location header in the creation case since the client already set the resource ID.
+
+PUT is not a safe operation, in that it modifies (or creates) state on the server, but it is idempotent. In other words, if you create or update a resource using PUT and then make that same call again, the resource is still there and still has the same state as it did with the first call.
+
+If, for instance, calling PUT on a resource increments a counter within the resource, the call is no longer idempotent. Sometimes that happens and it may be enough to document that the call is not idempotent. However, it's recommended to keep PUT requests idempotent. It is strongly recommended to use POST for non-idempotent requests.
+
+Examples:
+
+PUT http://www.example.com/customers/12345
+PUT http://www.example.com/customers/12345/orders/98765
+PUT http://www.example.com/buckets/secret_stuff
+
+
+
+DELETE
+DELETE is used to delete a resource identified by a URI.
+
+On successful deletion, might return HTTP status 200 (OK) along with a response body, or HTTP status 204 (NO CONTENT) with no response body. 
+
+
+
+Examples:
+
+DELETE http://www.example.com/customers/12345
+DELETE http://www.example.com/customers/12345/orders
+DELETE http://www.example.com/bucket/sample

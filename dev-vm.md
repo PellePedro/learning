@@ -101,6 +101,7 @@ go install github.com/josharian/impl@latest
 go get -u github.com/cweill/gotests/...
 go get -u github.com/koron/iferr
 
+go install honnef.co/go/tools/cmd/staticcheck@2023.1.2
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.50.1
 go install honnef.co/go/tools/cmd/staticcheck@2022.1
 go install github.com/go-delve/delve/cmd/dlv@latest

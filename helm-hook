@@ -1,0 +1,31 @@
+
+
+[Ready](https://github.com/helm/helm/blob/952708b436bb2c8d5ef0e2e9ef1d8aabe64aeae9/pkg/kube/ready.go#L225)
+```
+
+func (c *ReadyChecker) jobReady(job *batchv1.Job) bool {
+	if job.Status.Failed > *job.Spec.BackoffLimit {
+		c.log("Job is failed: %s/%s", job.GetNamespace(), job.GetName())
+		return false
+	}
+	if job.Spec.Completions != nil && job.Status.Succeeded < *job.Spec.Completions {
+		c.log("Job is not completed: %s/%s", job.GetNamespace(), job.GetName())
+		return false
+	}
+	return true
+}
+
+
+// isPodReady returns true if a pod is ready; false otherwise.
+func (c *ReadyChecker) isPodReady(pod *corev1.Pod) bool {
+	for _, c := range pod.Status.Conditions {
+		if c.Type == corev1.PodReady && c.Status == corev1.ConditionTrue {
+			return true
+		}
+	}
+	c.log("Pod is not ready: %s/%s", pod.GetNamespace(), pod.GetName())
+	return false
+}
+
+
+```

@@ -26,6 +26,47 @@ func (c *ReadyChecker) isPodReady(pod *corev1.Pod) bool {
 	c.log("Pod is not ready: %s/%s", pod.GetNamespace(), pod.GetName())
 	return false
 }
+```
+```
 
+func checkHelmHookStatus(clientset *kubernetes.Clientset, namespace string) error {
+	labelSelector := "app.kubernetes.io/managed-by=Helm"
+
+	jobs, err := clientset.BatchV1().Jobs(namespace).List(context.TODO(), metav1.ListOptions{
+		LabelSelector: labelSelector,
+	})
+	if err != nil {
+		return err
+	}
+
+	pods, err := clientset.CoreV1().Pods(namespace).List(context.TODO(), metav1.ListOptions{
+		LabelSelector: labelSelector,
+	})
+	if err != nil {
+		return err
+	}
+
+	if len(jobs.Items) == 0 && len(pods.Items) == 0 {
+		fmt.Println("No Helm hook resources found.")
+		return nil
+	}
+
+	for _, job := range jobs.Items {
+		fmt.Printf("Job: %s\n", job.Name)
+		fmt.Printf("Status: %s\n", strings.Title(string(job.Status.CompletionTime.Time.IsZero())))
+		fmt.Printf("Completions: %d/%d\n", job.Status.Succeeded, *job.Spec.Completions)
+		fmt.Println("---")
+	}
+
+	for _, pod := range pods.Items {
+		fmt.Printf("Pod: %s\n", pod.Name)
+		fmt.Printf("Status: %s\n", strings.Title(string(pod.Status.Phase)))
+		fmt.Println("---")
+	}
+
+	return nil
+
+}
+```
 
 ```

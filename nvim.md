@@ -2,7 +2,7 @@
 [rafaelderolez](https://github.com/rafaelderolez/astronvim)  
 [mehalter](https://code.mehalter.com/AstroNvim_user/~files)  
 [A-Lamia](https://github.com/A-Lamia/AstroNvim-conf)  
-
+[vsedov](https://github.com/vsedov/nvim)
 
 # Awesome Configs
 https://github.com/herschel-ma/nvim-config

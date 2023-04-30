@@ -1,4 +1,7 @@
-# Source Control
+# Local and remote development
+
+# Source Control (git)
+## Git worktree
 
 # Finding Stuff
 ## Open File/Recent files

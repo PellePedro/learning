@@ -5,5 +5,6 @@
 [Alpga2phi](https://github.com/alpha2phi/modern-neovim)  
 [ibhagwan](https://github.com/ibhagwan/nvim-lua)  
 
-[LunarVim/LunarVim](https://github.com/LunarVim/LunarVim)  
+[semanticart](https://github.com/semanticart/neovim-config)  
+[LunarVim/LunarVim](https://github.com/LunarVim/LunarVim)
 

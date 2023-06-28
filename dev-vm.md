@@ -106,6 +106,7 @@ go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.50.1
 go install honnef.co/go/tools/cmd/staticcheck@2022.1
 go install github.com/go-delve/delve/cmd/dlv@latest
 go install golang.org/x/tools/gopls@latest
+go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 # Node
 curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - &&\
@@ -229,6 +230,12 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scrip
 chmod +x get_helm.sh
 sudo ./get_helm.sh
 helm version
+```
+
+## Install k9s
+```
+# NOTE: The dev version will be in effect!
+go install github.com/derailed/k9s@latest
 ```
 
 ## Install delta

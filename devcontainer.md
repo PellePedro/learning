@@ -1,4 +1,12 @@
-# Devcontainers
+# Devcontainer
+
+## cli
+```
+npm install -g @devcontainers/cli
+```
+
+
+# Repos
 
 [vankichi](https://github.com/vankichi/dotfiles/tree/master/dockers)
 

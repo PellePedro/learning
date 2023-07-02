@@ -4,7 +4,13 @@
 ```
 npm install -g @devcontainers/cli
 ```
-
+## Install Skyramp
+```
+#!/bin/sh
+set -e
+echo "Installing feature 'skyramp'"
+CI=true bash -c "$(curl -fsSL  https://skyramp-public.s3.us-west-2.amazonaws.com/installer/install.sh)"
+```
 
 # Repos
 

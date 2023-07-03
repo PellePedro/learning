@@ -122,8 +122,7 @@ sudo apt-get install -y nodejs
 cat <<EOF > Dockerfile.nvim
 FROM debian:bullseye as builder
 
-#ARG NVIM_RELEASE=release
-ARG NVIM_RELEASE=master
+ARG NVIM_RELEASE=release-0.9
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -204,18 +203,21 @@ rm awscliv2.zip
 aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j1n2c2p2
 ```
 
+## Install gh-cli
+```
+type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+&& sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+&& sudo apt update \
+&& sudo apt install gh -y
+```
+
 ## Install kubectl
 ```
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin
-```
-
-## Install skaffold
-```
-curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
-sudo install skaffold /usr/local/bin/ && \
-rm skaffold
 ```
 
 ## Install kind
@@ -236,6 +238,13 @@ helm version
 ```
 # NOTE: The dev version will be in effect!
 go install github.com/derailed/k9s@latest
+```
+
+## Install skaffold
+```
+curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+sudo install skaffold /usr/local/bin/ && \
+rm skaffold
 ```
 
 ## Install delta

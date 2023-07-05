@@ -8,6 +8,13 @@
 ```
 npm install -g @devcontainers/cli
 ```
+
+## devcontainer
+```
+devcontainer build --workspace-folder sample-microservices
+```
+
+
 ## Install Skyramp
 ```
 #!/bin/sh

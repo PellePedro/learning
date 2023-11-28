@@ -33,7 +33,7 @@ The product-catalog service should read product items from a json file (as inclu
 
 The product-service should implement a http API to read and search products as:
 
-http://product-catalog/products/search?desc={$desc}
+http://product-catalog/products/search?desc={$desc}   
 http://product-catalog/products/read?id={$id}
 
 products.json
